@@ -1,0 +1,25 @@
+import React from 'react';
+import Link from 'next/link';
+import { Category } from '../lib/mock';
+import CategoryIcon from './CategoryIcon';
+import { ArrowUpRight } from 'lucide-react';
+
+interface CategoryCardProps {
+  category: Category;
+}
+
+const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
+  return (
+    <Link href={`/category/${category.slug}`} className="category-card">
+      <div className="card-icon"><CategoryIcon slug={category.slug} /></div>
+      <div className="card-content">
+        <h3 className="card-title">{category.name}</h3>
+        <p className="card-description">{category.description}</p>
+        <span className="card-action">Luyện ngay <ArrowUpRight size={13} /></span>
+      </div>
+      <div className="card-arrow" aria-hidden="true">→</div>
+    </Link>
+  );
+};
+
+export default CategoryCard;

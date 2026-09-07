@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.open-next/
+.wrangler/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+.dev.vars
+cloudflare-env.d.ts
+.vercel
