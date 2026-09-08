@@ -14,7 +14,6 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
       <div className="card-icon" aria-hidden="true"><CategoryIcon slug={category.slug} /></div>
       <div className="card-content">
         <h3 className="card-title">{category.name}</h3>
-        <p className="card-description">{category.description}</p>
         <span className="card-action">Luyện ngay <ArrowUpRight size={13} aria-hidden="true" /></span>
       </div>
       <div className="card-arrow" aria-hidden="true">→</div>
