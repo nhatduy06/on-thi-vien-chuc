@@ -586,12 +586,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   margin-bottom: 86px;
   padding: 78px 64px 84px;
   background-color: #0052cc;
-  background-image: url('/hero-study.jpg');
-  background-position: center right;
-  background-size: cover;
+  background-image: none;
 }
-.home-hero-overlay { position: absolute; inset: 0; z-index: 0; background: linear-gradient(90deg, rgba(0, 82, 204, .98) 0%, rgba(0, 82, 204, .91) 24%, rgba(0, 82, 204, .66) 45%, rgba(0, 82, 204, .28) 64%, rgba(0, 82, 204, 0) 82%); pointer-events: none; }
-.home-hero-content { max-width: 630px; }
+.home-hero-image { position: absolute !important; z-index: 0; object-fit: cover; object-position: center right; }
+.home-hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(0, 82, 204, .98) 0%, rgba(0, 82, 204, .91) 24%, rgba(0, 82, 204, .66) 45%, rgba(0, 82, 204, .28) 64%, rgba(0, 82, 204, 0) 82%); pointer-events: none; }
+.home-hero-content { z-index: 2; max-width: 630px; }
 .home-hero h1 { text-shadow: 0 2px 18px rgba(0, 31, 104, .22); }
 .home-hero-description { color: #e3ecff; text-shadow: 0 1px 10px rgba(0, 31, 104, .18); }
 .home-hero-proof { max-width: 520px; }
@@ -603,6 +602,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 @media (max-width: 700px) {
-  .home-hero { min-height: 620px; margin-bottom: 54px; padding: 48px 22px 58px; background-position: 68% center; }
+  .home-hero { min-height: 620px; margin-bottom: 54px; padding: 48px 22px 58px; }
+  .home-hero-image { object-position: 68% center; }
   .home-hero-overlay { background: linear-gradient(90deg, rgba(0, 82, 204, .98) 0%, rgba(0, 82, 204, .88) 48%, rgba(0, 82, 204, .43) 100%); }
 }

@@ -1,4 +1,5 @@
 import type { GetStaticProps, NextPage } from 'next';
+import Image from 'next/image';
 import { useState, type ReactNode } from 'react';
 import Layout from '../components/Layout';
 import CategoryCard from '../components/CategoryCard';
@@ -43,6 +44,16 @@ const Home: NextPage<HomeProps> = ({ initialCategories }) => {
     <Layout title="Trang chủ - Viên Chức 247">
       <div className="home-page">
         <section className="home-hero" aria-labelledby="home-title">
+          <Image
+            className="home-hero-image"
+            src="/hero-study.jpg"
+            alt=""
+            fill
+            priority
+            fetchPriority="high"
+            sizes="100vw"
+            aria-hidden="true"
+          />
           <div className="home-hero-overlay" aria-hidden="true" />
           <div className="home-hero-content">
             <h1 id="home-title">Chinh phục kỳ thi <span>viên chức</span> dễ dàng hơn.</h1>
