@@ -59,7 +59,8 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 - [X] Viết unit test và integration test
 - [X] Thực hiện đánh giá hiệu năng
 - [ ] Tối ưu hóa mã nguồn API và frontend
-- [ ] Triển khai lên Vercel Hobby
+- [x] Tối ưu frontend: loại bỏ request font chặn render, render sẵn trang chủ bằng ISR và cải thiện accessibility
+- [x] Triển khai lên Vercel Hobby (https://vienchuc247.vercel.app)
 - [ ] Thiết lập CI/CD pipeline (nếu cần)
 - [ ] Giám sát và bảo trì môi trường production
 ### Giai đoạn 6: Quản trị hệ thống (Admin Panel)
@@ -100,12 +101,26 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 ---
 
 ## Ghi chú
-- **Trạng thái hiện tại:** ✅ UI người dùng, CMS admin và Supabase data access đã hoàn thành. Deployment chuyển sang Vercel Hobby.
+- **Trạng thái hiện tại:** ✅ UI người dùng, CMS admin và Supabase data access đã hoàn thành. Đã deploy lên Vercel Hobby.
+- **Tối ưu gần đây:** ✅ Loại bỏ Google Fonts/preconnect ngoài, giảm request chặn render, dùng ISR cho danh mục trang chủ và sửa các vấn đề accessibility chính.
+- **URL production:** https://vienchuc247.vercel.app
 - **Các API đã tạo:**
   - `GET /api/categories` — Trả về danh sách danh mục ôn tập (từ Supabase hoặc mock data)
   - `GET /api/subjects?categoryId=1` — Trả về chủ đề theo danh mục (từ Supabase hoặc mock data)
+  - `GET /api/questions?subjectId=1` — Trả về câu hỏi theo chủ đề
+  - `POST /api/results` — Lưu kết quả bài thi
+  - `GET /api/admin/stats` — Thống kê dashboard (cần đăng nhập admin)
+  - `CRUD /api/admin/*` — Quản lý categories, subjects, questions, results
 - **Các tệp đã tạo:**
   - `src/lib/db.ts` — Lớp truy cập Supabase, tự động fallback mock khi local chưa cấu hình
+  - `src/lib/store.ts` — Data access layer với Supabase + in-memory fallback
+  - `src/lib/admin-auth.ts` — HMAC-signed HttpOnly cookie cho admin session
   - `supabase/schema.sql` — Schema PostgreSQL
   - `supabase/seed.sql` — Seed categories, subjects và câu hỏi ban đầu
-- **Bước tiếp theo:** Tạo Supabase project, chạy schema/seed SQL, khai báo biến môi trường trên Vercel và deploy production.
+- **Environment Variables trên Vercel:**
+  - `SUPABASE_URL` — URL Supabase project
+  - `SUPABASE_SERVICE_ROLE_KEY` — Service role key (server-side only)
+  - `NEXT_PUBLIC_SUPABASE_URL` — URL Supabase cho client-side
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Anon key cho client-side
+  - `ADMIN_PASSWORD` — Mật khẩu admin CMS
+- **Bước tiếp theo:** Đo lại PageSpeed sau deploy, tiếp tục tối ưu API nếu cần, rồi hoàn thiện Giai đoạn 6.4 (Thống kê chi tiết), Giai đoạn 6.5 (Quản lý người dùng) và Giai đoạn 4 (Bài tập điền khuyết).

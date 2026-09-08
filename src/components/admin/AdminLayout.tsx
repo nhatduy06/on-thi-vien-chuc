@@ -35,13 +35,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = 'Admin - We
         <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="noindex, nofollow" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </Head>
 
       <div className="admin-root">
-        <aside className={`admin-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
+        <aside id="admin-sidebar" className={`admin-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
           <Link href="/admin" className="admin-logo" onClick={() => setSidebarOpen(false)}>
             <span className="admin-logo-icon"><LayoutDashboard size={15} /></span>
             <span className="admin-logo-text">Admin CMS</span>
@@ -80,7 +77,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = 'Admin - We
             <button
               className="admin-hamburger"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-label="Toggle sidebar"
+              aria-label="Mở hoặc đóng thanh điều hướng quản trị"
+              aria-expanded={sidebarOpen}
+              aria-controls="admin-sidebar"
+              type="button"
             >
                <Menu size={18} />
             </button>

@@ -96,8 +96,8 @@ const CategoryDetail: NextPage<CategoryDetailProps> = ({ slug }) => {
                   <div className="subject-meta">
                     <span className="question-count"><ClipboardList size={14} /> {subject.question_count || 0} câu hỏi</span>
                   </div>
-                  <Link href={`/exam/${subject.id}`}>
-                    <button className="btn-start">Bắt đầu ôn tập →</button>
+                  <Link href={`/exam/${subject.id}`} className="btn-start">
+                    Bắt đầu ôn tập →
                   </Link>
                 </div>
               ))}

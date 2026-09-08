@@ -1,27 +1,40 @@
-import type { NextPage } from 'next';
-import { useState, useEffect } from 'react';
+import type { GetStaticProps, NextPage } from 'next';
+import { useState, type ReactNode } from 'react';
 import Layout from '../components/Layout';
 import CategoryCard from '../components/CategoryCard';
 import { Category } from '../lib/mock';
-import { readJson } from '../lib/http';
-import { ArrowRight, BarChart3, BookOpenCheck, CheckCircle2, ClipboardCheck, ListChecks, Smartphone, Target, Timer, TrendingUp, Trophy } from 'lucide-react';
+import { getCategories } from '../lib/db';
+import {
+  ArrowRight,
+  BarChart3,
+  BookOpenCheck,
+  CheckCircle2,
+  ClipboardCheck,
+  Clock3,
+  ListChecks,
+  MonitorSmartphone,
+  Target,
+  Trophy,
+  Users,
+} from 'lucide-react';
 
-const Home: NextPage = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+interface HomeProps {
+  initialCategories: Category[];
+}
+
+const Home: NextPage<HomeProps> = ({ initialCategories }) => {
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCategories = async () => {
+  const refreshCategories = async () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch('/api/categories');
-      const json = await readJson(res);
-      if (json.success) {
-        setCategories(json.data);
-      } else {
-        setError(json.message || 'Không thể tải danh mục');
-      }
+      const response = await fetch('/api/categories');
+      const json = await response.json();
+      if (!response.ok || !json.success) throw new Error(json.message || 'Không thể tải danh mục');
+      setCategories(json.data);
     } catch {
       setError('Lỗi kết nối đến máy chủ');
     } finally {
@@ -29,116 +42,110 @@ const Home: NextPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
   return (
-    <Layout title="Trang chủ - Web ôn thi viên chức">
-      <section className="hero hero-banner">
-        <div className="hero-layout">
-          <div className="hero-content">
-            <h1 className="hero-title">Ôn thi viên chức hiệu quả. Sẵn sàng cho kỳ thi.</h1>
-            <div className="hero-buttons">
-              <a href="#categories" className="btn btn-primary">Bắt đầu ôn thi <ArrowRight size={15} /></a>
-              <a href="#categories" className="btn btn-secondary">Xem danh mục <ArrowRight size={15} /></a>
+    <Layout title="Trang chủ - Viên Chức 247">
+      <div className="home-page">
+        <section className="home-hero" aria-labelledby="home-title">
+          <div className="home-hero-glow home-hero-glow-one" aria-hidden="true" />
+          <div className="home-hero-glow home-hero-glow-two" aria-hidden="true" />
+          <div className="home-hero-content">
+            <div className="home-eyebrow"><span className="eyebrow-dot" /> Nền tảng ôn thi có hệ thống</div>
+            <h1 id="home-title">Chinh phục kỳ thi <span>viên chức</span> dễ dàng hơn.</h1>
+            <p className="home-hero-description">
+              Luyện tập theo từng chủ đề, thi thử với đồng hồ thực và xem lại từng lỗi sai để tiến bộ chắc chắn mỗi ngày.
+            </p>
+            <div className="home-hero-actions">
+              <a href="#categories" className="home-primary-button">Bắt đầu thi thử <ArrowRight size={17} aria-hidden="true" /></a>
+              <a href="#study-flow" className="home-secondary-button"><BookOpenCheck size={17} aria-hidden="true" /> Xem lộ trình</a>
             </div>
-            <div className="hero-note" aria-label="Điểm nổi bật">
-              <span>Thi thử theo từng chủ đề</span>
-              <span>Chấm điểm ngay</span>
-              <span>Học trên mọi thiết bị</span>
+            <div className="home-hero-proof" aria-label="Thông tin nền tảng">
+              <div><strong>{categories.length || 4}</strong><span>Lĩnh vực ôn tập</span></div>
+              <i aria-hidden="true" />
+              <div><strong>24/7</strong><span>Chủ động thời gian</span></div>
+              <i aria-hidden="true" />
+              <div><strong>10/10</strong><span>Phản hồi sau bài làm</span></div>
             </div>
           </div>
-          <div className="hero-banner-visual" aria-label="Lộ trình ôn thi minh họa">
-            <div className="banner-visual-heading"><span>Lộ trình ôn thi</span><span className="banner-live"><i /> Đang hoạt động</span></div>
-            <div className="banner-visual-progress"><span>Tiến độ phiên học</span><strong>68%</strong></div>
-            <div className="banner-progress-track"><span /></div>
-            <div className="banner-visual-list">
-              <div className="banner-list-item is-done"><span className="banner-list-icon"><CheckCircle2 size={15} /></span><span><strong>Kiến thức chung</strong><small>Đã hoàn thành</small></span><CheckCircle2 size={15} /></div>
-              <div className="banner-list-item is-active"><span className="banner-list-icon"><BookOpenCheck size={15} /></span><span><strong>Luật viên chức</strong><small>Đang ôn tập</small></span><ArrowRight size={15} /></div>
-              <div className="banner-list-item"><span className="banner-list-icon"><Target size={15} /></span><span><strong>Tin học & Tiếng Anh</strong><small>Sẵn sàng bắt đầu</small></span><ArrowRight size={15} /></div>
+
+          <div className="home-hero-dashboard" aria-label="Bảng tiến độ ôn thi minh họa" role="img">
+            <div className="dashboard-window">
+              <div className="dashboard-topbar"><span className="window-dots"><i /><i /><i /></span><span>Tiến độ ôn thi</span><span className="dashboard-status"><i /> Đang học</span></div>
+              <div className="dashboard-summary">
+                <div><small>Tiến độ tuần này</small><strong>68%</strong><span className="dashboard-progress"><i /></span></div>
+                <div className="dashboard-score"><Trophy size={19} aria-hidden="true" /><strong>8.6</strong><small>Điểm gần nhất</small></div>
+              </div>
+              <div className="dashboard-label"><span>Chủ đề đang học</span><span>4 nội dung</span></div>
+              <div className="dashboard-subjects">
+                <div className="dashboard-subject is-done"><span><CheckCircle2 size={16} aria-hidden="true" /></span><strong>Kiến thức chung</strong><small>Hoàn thành</small></div>
+                <div className="dashboard-subject is-active"><span><BookOpenCheck size={16} aria-hidden="true" /></span><strong>Luật viên chức</strong><small>Đang ôn tập</small><ArrowRight size={15} aria-hidden="true" /></div>
+                <div className="dashboard-subject"><span><Target size={16} aria-hidden="true" /></span><strong>Tin học & Tiếng Anh</strong><small>Sẵn sàng bắt đầu</small></div>
+              </div>
+              <div className="dashboard-footer"><span><TrendingLine /> Học đều mỗi ngày</span><span>+12% tuần này</span></div>
             </div>
-            <div className="banner-visual-footer"><span><TrendingUp size={15} /> Học đều mỗi ngày</span><span>4 nội dung</span></div>
+            <div className="dashboard-badge"><span><CheckCircle2 size={18} aria-hidden="true" /></span><div><strong>Tiến bộ rõ rệt</strong><small>Nhờ ôn đúng trọng tâm</small></div></div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="trust-strip" aria-label="Giá trị của nền tảng">
-        <div className="trust-intro"><span className="trust-mark"><BookOpenCheck size={18} /></span><strong>Công cụ hỗ trợ bạn luyện thi có hệ thống</strong></div>
-        <div className="trust-items">
-          <div className="trust-item"><Target size={17} /><span><strong>Nhiều bộ câu hỏi</strong><small>Theo từng nội dung</small></span></div>
-          <div className="trust-item"><CheckCircle2 size={17} /><span><strong>Chấm điểm tự động</strong><small>Phản hồi ngay sau bài làm</small></span></div>
-          <div className="trust-item"><TrendingUp size={17} /><span><strong>Theo dõi tiến độ</strong><small>Nhìn rõ điểm cần cải thiện</small></span></div>
-        </div>
-      </section>
+        <section className="home-trust" aria-label="Lợi ích nền tảng">
+          <div className="home-trust-heading"><span><BookOpenCheck size={20} aria-hidden="true" /></span><strong>Mọi thứ bạn cần để ôn thi tự tin hơn</strong></div>
+          <div className="home-trust-items">
+            <div><Target size={18} aria-hidden="true" /><span><strong>Bám sát trọng tâm</strong><small>Chia theo từng nội dung</small></span></div>
+            <div><CheckCircle2 size={18} aria-hidden="true" /><span><strong>Chấm điểm tức thì</strong><small>Biết đúng sai ngay</small></span></div>
+            <div><BarChart3 size={18} aria-hidden="true" /><span><strong>Nhìn thấy tiến bộ</strong><small>Ôn tập có mục tiêu</small></span></div>
+          </div>
+        </section>
 
-      <section className="categories-section" id="categories">
-        <div className="section-heading">
-          <div>
-            <h2 className="section-title">Chọn nội dung bạn muốn ôn</h2>
+        <section className="home-section home-categories" id="categories" aria-labelledby="categories-title">
+          <div className="home-section-heading">
+            <div><span className="home-section-kicker">Chọn đúng nội dung</span><h2 id="categories-title">Danh mục ôn thi trọng tâm</h2><p>Bắt đầu từ phần kiến thức phù hợp với mục tiêu của bạn.</p></div>
+            <span className="home-section-count">{categories.length || 4} lĩnh vực</span>
           </div>
-          <span className="section-count">{categories.length > 0 ? `${categories.length} lĩnh vực` : 'Theo dữ liệu hệ thống'}</span>
-        </div>
+          {loading && <div className="loading-state"><div className="spinner" /><p>Đang tải danh mục...</p></div>}
+          {error && <div className="error-state"><p className="error-message">{error}</p><button className="btn btn-retry" onClick={refreshCategories} type="button">Thử lại</button></div>}
+          {!loading && !error && categories.length === 0 && <div className="empty-state"><p>Chưa có danh mục nào.</p></div>}
+          {!loading && !error && categories.length > 0 && <div className="home-category-grid">{categories.map((category) => <CategoryCard key={category.id} category={category} />)}<a href="#study-flow" className="home-all-card"><span><ArrowRight size={22} aria-hidden="true" /></span><strong>Xem lộ trình học</strong><small>Khám phá cách ôn tập hiệu quả</small></a></div>}
+        </section>
 
-        {loading && (
-          <div className="loading-state">
-            <div className="spinner"></div>
-            <p>Đang tải danh mục...</p>
+        <section className="home-section home-flow" id="study-flow" aria-labelledby="flow-title">
+          <div className="home-section-heading centered"><div><span className="home-section-kicker">Phương pháp đơn giản</span><h2 id="flow-title">Lộ trình học tập thông minh</h2><p>Ba bước rõ ràng để biến mỗi phiên ôn tập thành tiến bộ.</p></div></div>
+          <div className="home-flow-grid">
+            <div className="home-flow-line" aria-hidden="true" />
+            <HomeStep icon={<ListChecks size={25} aria-hidden="true" />} number="01" title="Chọn chủ đề" description="Đi thẳng vào phần kiến thức bạn muốn luyện tập hôm nay." />
+            <HomeStep icon={<ClipboardCheck size={25} aria-hidden="true" />} number="02" title="Làm bài tập trung" description="Trả lời từng câu hỏi với thời gian và tiến độ được hiển thị rõ." />
+            <HomeStep icon={<Trophy size={25} aria-hidden="true" />} number="03" title="Rút kinh nghiệm" description="Xem điểm, đáp án và lời giải để biết phần cần cải thiện." />
           </div>
-        )}
-        {error && (
-          <div className="error-state">
-            <p className="error-message">{error}</p>
-            <button className="btn btn-retry" onClick={fetchCategories}>Thử lại</button>
-          </div>
-        )}
-        {!loading && !error && categories.length === 0 && (
-          <div className="empty-state"><p>Chưa có danh mục nào.</p></div>
-        )}
-        {!loading && !error && categories.length > 0 && (
-          <div className="categories-grid">
-            {categories.map(c => <CategoryCard key={c.id} category={c} />)}
-          </div>
-        )}
-      </section>
+        </section>
 
-      <section className="study-flow" id="study-flow">
-        <div className="section-heading">
-          <div>
-            <h2 className="section-title">Ôn thi đơn giản hơn với 3 bước</h2>
+        <section className="home-section home-features" id="features" aria-labelledby="features-title">
+          <div className="home-feature-visual" aria-hidden="true">
+            <div className="feature-visual-backdrop" />
+            <div className="feature-exam-card"><div className="feature-exam-header"><span>Đề thi thử #024</span><span><Clock3 size={14} /> 14:32</span></div><div className="feature-question"><small>Câu hỏi 18/50</small><strong>Quyền và nghĩa vụ của viên chức được quy định như thế nào?</strong></div><div className="feature-options"><i /><i className="selected" /><i /><i /></div><div className="feature-exam-bottom"><span>Đã làm 36%</span><span className="feature-mini-progress"><i /></span></div></div>
+            <div className="feature-score-card"><BarChart3 size={18} /><strong>8.6/10</strong><small>Điểm trung bình</small></div>
           </div>
-        </div>
-        <div className="flow-grid">
-          <div className="flow-item"><div className="flow-icon"><ListChecks size={21} /></div><span className="flow-number">01</span><h3>Chọn chủ đề</h3><p>Đi thẳng vào phần kiến thức bạn muốn luyện tập hôm nay.</p></div>
-          <div className="flow-item"><div className="flow-icon"><ClipboardCheck size={21} /></div><span className="flow-number">02</span><h3>Làm bài tập trung</h3><p>Trả lời từng câu hỏi với thời gian và tiến độ được hiển thị rõ.</p></div>
-          <div className="flow-item"><div className="flow-icon"><Trophy size={21} /></div><span className="flow-number">03</span><h3>Rút kinh nghiệm</h3><p>Xem điểm, đáp án và lời giải để biến mỗi lần làm bài thành tiến bộ.</p></div>
-        </div>
-      </section>
+          <div className="home-feature-copy"><span className="home-section-kicker">Công cụ hỗ trợ</span><h2 id="features-title">Tự tin hơn sau mỗi lần làm bài</h2><p>Nền tảng giúp bạn luyện tập như thi thật nhưng học được nhiều hơn sau mỗi câu trả lời.</p><div className="home-feature-list"><FeatureItem icon={<CheckCircle2 size={19} aria-hidden="true" />} title="Chấm điểm & phân tích tự động" description="Biết ngay kết quả, câu sai và lời giải chi tiết sau khi nộp bài." /><FeatureItem icon={<Clock3 size={19} aria-hidden="true" />} title="Mô phỏng thời gian thực" description="Rèn thói quen phân bổ thời gian với đồng hồ đếm ngược." /><FeatureItem icon={<MonitorSmartphone size={19} aria-hidden="true" />} title="Học trên mọi thiết bị" description="Tiếp tục phiên ôn tập trên máy tính, tablet hoặc điện thoại." /></div></div>
+        </section>
 
-      <section className="features-section" id="features">
-        <div className="section-heading">
-          <div>
-            <h2 className="section-title">Công cụ giúp bạn học hiệu quả</h2>
-          </div>
-        </div>
-        <div className="feature-showcase">
-          <div className="feature-list">
-            <div className="feature-row"><span className="feature-icon"><Timer size={19} /></span><span><strong>Đồng hồ đếm ngược</strong><small>Rèn thói quen phân bổ thời gian như trong kỳ thi thật.</small></span></div>
-            <div className="feature-row"><span className="feature-icon"><CheckCircle2 size={19} /></span><span><strong>Chấm điểm tự động</strong><small>Biết kết quả ngay sau khi hoàn thành bài làm.</small></span></div>
-            <div className="feature-row"><span className="feature-icon"><BarChart3 size={19} /></span><span><strong>Phân tích kết quả</strong><small>Xem lại đáp án, câu đúng sai và lời giải chi tiết.</small></span></div>
-            <div className="feature-row"><span className="feature-icon"><Smartphone size={19} /></span><span><strong>Học trên mọi thiết bị</strong><small>Tiếp tục phiên ôn tập trên máy tính, tablet hoặc điện thoại.</small></span></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="final-cta">
-        <div>
-          <h2>Bắt đầu buổi ôn tập đầu tiên</h2>
-        </div>
-        <a href="#categories" className="btn btn-primary">Bắt đầu ôn thi <ArrowRight size={15} /></a>
-      </section>
+        <section className="home-final-cta"><div><span className="home-section-kicker">Sẵn sàng bắt đầu?</span><h2>Xây dựng sự tự tin cho kỳ thi tiếp theo.</h2><p>Mỗi ngày một phiên ôn tập có mục tiêu sẽ tạo nên khác biệt.</p></div><a href="#categories" className="home-primary-button">Bắt đầu ôn thi <ArrowRight size={17} aria-hidden="true" /></a></section>
+      </div>
     </Layout>
   );
 };
 
+function HomeStep({ icon, number, title, description }: { icon: ReactNode; number: string; title: string; description: string }) {
+  return <div className="home-step"><div className="home-step-icon">{icon}</div><span>{number}</span><h3>{title}</h3><p>{description}</p></div>;
+}
+
+function FeatureItem({ icon, title, description }: { icon: ReactNode; title: string; description: string }) {
+  return <div className="home-feature-item"><span>{icon}</span><div><h3>{title}</h3><p>{description}</p></div></div>;
+}
+
+function TrendingLine() {
+  return <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2 10.5 5.2 7.3l2.1 2.1L13 3.7M9.7 3.7H13v3.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
 export default Home;
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => ({
+  props: { initialCategories: await getCategories() },
+  revalidate: 60,
+});
