@@ -15,7 +15,6 @@ import {
   MonitorSmartphone,
   Target,
   Trophy,
-  Users,
 } from 'lucide-react';
 
 interface HomeProps {
@@ -46,8 +45,7 @@ const Home: NextPage<HomeProps> = ({ initialCategories }) => {
     <Layout title="Trang chủ - Viên Chức 247">
       <div className="home-page">
         <section className="home-hero" aria-labelledby="home-title">
-          <div className="home-hero-glow home-hero-glow-one" aria-hidden="true" />
-          <div className="home-hero-glow home-hero-glow-two" aria-hidden="true" />
+          <div className="home-hero-overlay" aria-hidden="true" />
           <div className="home-hero-content">
             <div className="home-eyebrow"><span className="eyebrow-dot" /> Nền tảng ôn thi có hệ thống</div>
             <h1 id="home-title">Chinh phục kỳ thi <span>viên chức</span> dễ dàng hơn.</h1>
@@ -65,24 +63,6 @@ const Home: NextPage<HomeProps> = ({ initialCategories }) => {
               <i aria-hidden="true" />
               <div><strong>10/10</strong><span>Phản hồi sau bài làm</span></div>
             </div>
-          </div>
-
-          <div className="home-hero-dashboard" aria-label="Bảng tiến độ ôn thi minh họa" role="img">
-            <div className="dashboard-window">
-              <div className="dashboard-topbar"><span className="window-dots"><i /><i /><i /></span><span>Tiến độ ôn thi</span><span className="dashboard-status"><i /> Đang học</span></div>
-              <div className="dashboard-summary">
-                <div><small>Tiến độ tuần này</small><strong>68%</strong><span className="dashboard-progress"><i /></span></div>
-                <div className="dashboard-score"><Trophy size={19} aria-hidden="true" /><strong>8.6</strong><small>Điểm gần nhất</small></div>
-              </div>
-              <div className="dashboard-label"><span>Chủ đề đang học</span><span>4 nội dung</span></div>
-              <div className="dashboard-subjects">
-                <div className="dashboard-subject is-done"><span><CheckCircle2 size={16} aria-hidden="true" /></span><strong>Kiến thức chung</strong><small>Hoàn thành</small></div>
-                <div className="dashboard-subject is-active"><span><BookOpenCheck size={16} aria-hidden="true" /></span><strong>Luật viên chức</strong><small>Đang ôn tập</small><ArrowRight size={15} aria-hidden="true" /></div>
-                <div className="dashboard-subject"><span><Target size={16} aria-hidden="true" /></span><strong>Tin học & Tiếng Anh</strong><small>Sẵn sàng bắt đầu</small></div>
-              </div>
-              <div className="dashboard-footer"><span><TrendingLine /> Học đều mỗi ngày</span><span>+12% tuần này</span></div>
-            </div>
-            <div className="dashboard-badge"><span><CheckCircle2 size={18} aria-hidden="true" /></span><div><strong>Tiến bộ rõ rệt</strong><small>Nhờ ôn đúng trọng tâm</small></div></div>
           </div>
         </section>
 
@@ -137,10 +117,6 @@ function HomeStep({ icon, number, title, description }: { icon: ReactNode; numbe
 
 function FeatureItem({ icon, title, description }: { icon: ReactNode; title: string; description: string }) {
   return <div className="home-feature-item"><span>{icon}</span><div><h3>{title}</h3><p>{description}</p></div></div>;
-}
-
-function TrendingLine() {
-  return <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2 10.5 5.2 7.3l2.1 2.1L13 3.7M9.7 3.7H13v3.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 
 export default Home;
