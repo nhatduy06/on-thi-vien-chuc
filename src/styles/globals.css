@@ -503,7 +503,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .home-step > span { color: var(--primary); font-family: var(--font-mono); font-size: .68rem; font-weight: 700; letter-spacing: .08em; }
 .home-step h3 { margin: 8px 0 8px; font-size: 1rem; }
 .home-step p { max-width: 260px; color: #71809d; font-size: .8rem; line-height: 1.6; }
-.home-features { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+.home-features { display: block; }
 .home-feature-visual { position: relative; min-height: 360px; padding: 38px 28px; }
 .feature-visual-backdrop { position: absolute; inset: 18px 28px; border-radius: 24px; background: #eaf1ff; transform: rotate(-4deg); }
 .feature-exam-card { position: relative; z-index: 1; max-width: 430px; padding: 22px; border: 1px solid #dbe4f5; border-radius: 17px; background: #fff; box-shadow: 0 18px 36px rgba(30,86,255,.12); }
@@ -521,7 +521,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .feature-score-card { position: absolute; right: 0; bottom: 36px; z-index: 2; display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; align-items: center; padding: 14px 17px; border: 1px solid #e0e7f4; border-radius: 12px; background: #fff; color: var(--primary); box-shadow: 0 10px 24px rgba(30,86,255,.15); }
 .feature-score-card strong { color: #263652; font-size: .9rem; }
 .feature-score-card small { grid-column: 2; color: #7986a1; font-size: .6rem; }
-.home-feature-copy { max-width: 510px; }
+.home-feature-copy { max-width: 510px; margin-left: auto; }
 .home-feature-copy h2 { margin-bottom: 30px; }
 .home-feature-copy > p { max-width: 460px; margin-bottom: 28px; }
 .home-feature-list { display: flex; flex-direction: column; gap: 22px; }
@@ -573,7 +573,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .feature-question { padding: 22px 0 17px; }
   .feature-question strong { font-size: .85rem; }
   .feature-score-card { right: -2px; bottom: 18px; }
-  .home-feature-copy { padding: 0 18px; }
+  .home-feature-copy { padding: 0 18px; margin-left: 0; }
   .home-final-cta { align-items: stretch; flex-direction: column; padding: 28px 22px; margin: 0 18px 6px; }
   .home-final-cta .home-primary-button { width: 100%; }
   .footer-grid { grid-template-columns: 1fr 1fr; }

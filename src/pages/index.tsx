@@ -85,10 +85,6 @@ const Home: NextPage<HomeProps> = ({ initialCategories }) => {
         </section>
 
         <section className="home-section home-features" id="features" aria-labelledby="features-title">
-          <div className="home-feature-visual" aria-hidden="true">
-            <div className="feature-visual-backdrop" />
-            <div className="feature-exam-card"><div className="feature-exam-header"><span /><span /></div><div className="feature-question"><strong /></div><div className="feature-options"><i /><i className="selected" /><i /><i /></div><div className="feature-exam-bottom"><span /><span className="feature-mini-progress"><i /></span></div></div>
-          </div>
           <div className="home-feature-copy"><h2 id="features-title">Tự tin hơn sau mỗi lần làm bài</h2><div className="home-feature-list"><FeatureItem icon={<CheckCircle2 size={19} aria-hidden="true" />} title="Chấm điểm & phân tích tự động" /><FeatureItem icon={<Clock3 size={19} aria-hidden="true" />} title="Mô phỏng thời gian thực" /><FeatureItem icon={<MonitorSmartphone size={19} aria-hidden="true" />} title="Học trên mọi thiết bị" /></div></div>
         </section>
 
