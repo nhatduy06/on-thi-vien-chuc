@@ -503,7 +503,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .home-step > span { color: var(--primary); font-family: var(--font-mono); font-size: .68rem; font-weight: 700; letter-spacing: .08em; }
 .home-step h3 { margin: 8px 0 8px; font-size: 1rem; }
 .home-step p { max-width: 260px; color: #71809d; font-size: .8rem; line-height: 1.6; }
-.home-features { display: block; }
+.home-features { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 70px; align-items: center; }
 .home-feature-visual { position: relative; min-height: 360px; padding: 38px 28px; }
 .feature-visual-backdrop { position: absolute; inset: 18px 28px; border-radius: 24px; background: #eaf1ff; transform: rotate(-4deg); }
 .feature-exam-card { position: relative; z-index: 1; max-width: 430px; padding: 22px; border: 1px solid #dbe4f5; border-radius: 17px; background: #fff; box-shadow: 0 18px 36px rgba(30,86,255,.12); }
@@ -529,6 +529,21 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .home-feature-item > span { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex: 0 0 auto; border-radius: 11px; background: #ebf1ff; color: var(--primary); }
 .home-feature-item h3 { margin-bottom: 3px; font-size: .9rem; }
 .home-feature-item p { color: #71809d; font-size: .78rem; line-height: 1.55; }
+.home-updates-panel { padding: 18px 22px 16px; border: 1px solid #cfdcf4; background: #fff; box-shadow: 0 8px 22px rgba(30,86,255,.06); }
+.home-updates-panel h2 { padding: 12px 15px; margin-bottom: 5px; background: linear-gradient(135deg, #17618c, #2d789e); color: #fff; font-size: 1.1rem; letter-spacing: -.02em; }
+.home-article-list { display: flex; flex-direction: column; }
+.home-article { display: flex; align-items: center; gap: 12px; padding: 13px 5px; border-bottom: 1px solid #e1e6ef; }
+.home-article:hover strong { color: var(--primary); }
+.home-article-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; flex: 0 0 auto; border-radius: 8px; }
+.article-book { background: #e9dbc5; color: #735a36; }
+.article-tip { background: #cdeff0; color: #287f83; }
+.article-notice { background: #dbeafa; color: #3568bd; }
+.home-article > span:last-child { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.home-article strong { color: #1d2b45; font-size: .82rem; line-height: 1.35; }
+.home-article small, .home-article time { color: #6f7c94; font-size: .68rem; line-height: 1.4; }
+.home-article time { color: #8792a6; }
+.home-articles-link { display: inline-flex; align-items: center; gap: 7px; padding: 13px 0 0; color: var(--primary); font-size: .72rem; font-weight: 750; }
+.home-articles-link:hover { color: var(--primary-dark); }
 .home-final-cta { display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 36px 42px; margin-bottom: 6px; border: 1px solid #c9d7f4; border-radius: 17px; background: linear-gradient(135deg, #eaf1ff, #f5f8ff); }
 .home-final-cta h2 { max-width: 560px; }
 .home-final-cta .home-primary-button { background: var(--primary); color: #fff; white-space: nowrap; }
@@ -538,7 +553,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .home-hero { grid-template-columns: 1fr; padding: 64px 42px 72px; }
   .home-hero-dashboard { max-width: 590px; width: 100%; margin: 0 auto; }
   .home-trust { grid-template-columns: 1fr; gap: 18px; }
-  .home-features { grid-template-columns: 1fr; gap: 28px; }
+  .home-features { grid-template-columns: 1fr; gap: 38px; }
   .home-feature-visual { max-width: 560px; width: 100%; margin: 0 auto; }
 }
 
@@ -574,6 +589,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .feature-question strong { font-size: .85rem; }
   .feature-score-card { right: -2px; bottom: 18px; }
   .home-feature-copy { padding: 0 18px; margin-left: 0; }
+  .home-updates-panel { margin: 0 18px; }
   .home-final-cta { align-items: stretch; flex-direction: column; padding: 28px 22px; margin: 0 18px 6px; }
   .home-final-cta .home-primary-button { width: 100%; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
