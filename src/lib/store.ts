@@ -4,6 +4,7 @@ import { mockCategories, mockSubjects, mockQuestions, Category, Subject, Questio
 
 export interface ExamResult {
   id: number;
+  userId: string | null;
   subjectId: number;
   subjectName: string;
   score: number;
@@ -89,6 +90,7 @@ function slugify(text: string): string {
 function mapResult(row: Record<string, unknown>, subjectName = ''): ExamResult {
   return {
     id: Number(row.id),
+    userId: row.user_id ? String(row.user_id) : null,
     subjectId: Number(row.subject_id),
     subjectName,
     score: Number(row.score),
@@ -348,7 +350,7 @@ export async function listResults(): Promise<ExamResult[]> {
   if (db && !shouldUseFallback()) {
     const { data, error } = await db
       .from('exam_results')
-      .select('id, subject_id, score, total_questions, correct_answers, time_spent, completed_at, subjects(name)')
+        .select('id, user_id, subject_id, score, total_questions, correct_answers, time_spent, completed_at, subjects(name)')
       .order('id', { ascending: false });
     throwIfError(error);
     return ((data ?? []) as Array<Record<string, unknown>>).map((row) => {
@@ -361,13 +363,13 @@ export async function listResults(): Promise<ExamResult[]> {
   return [...getState().results].sort((a, b) => b.id - a.id);
 }
 
-export async function createResult(input: Omit<ExamResult, 'id' | 'completedAt' | 'subjectName'>): Promise<ExamResult> {
+export async function createResult(input: Omit<ExamResult, 'id' | 'completedAt' | 'subjectName'> & { userId: string }): Promise<ExamResult> {
   const db = getSupabase();
   if (db && !shouldUseFallback()) {
     const { data, error } = await db
       .from('exam_results')
-      .insert({ subject_id: input.subjectId, score: input.score, total_questions: input.totalQuestions, correct_answers: input.correctAnswers, time_spent: input.timeSpent })
-      .select('id, subject_id, score, total_questions, correct_answers, time_spent, completed_at')
+        .insert({ user_id: input.userId, subject_id: input.subjectId, score: input.score, total_questions: input.totalQuestions, correct_answers: input.correctAnswers, time_spent: input.timeSpent })
+        .select('id, user_id, subject_id, score, total_questions, correct_answers, time_spent, completed_at')
       .single();
     throwIfError(error);
 

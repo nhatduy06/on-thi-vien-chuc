@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import { Question } from "../../lib/mock";
 import { readJson } from "../../lib/http";
+import { getSupabaseBrowserClient } from "../../lib/supabase-browser";
 import { CheckCircle2, Clock3, Lightbulb, XCircle } from "lucide-react";
 
 interface ResultView {
@@ -27,6 +28,7 @@ const ExamPage: NextPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState<ResultView | null>(null);
   const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
   const fetchQuestions = async () => {
     if (!subjectId) return;
@@ -89,11 +91,24 @@ const ExamPage: NextPage = () => {
       details,
     });
     setSubmitted(true);
-    setSaving(true);
+    setSaveMessage(null);
     try {
-      await fetch("/api/results", {
+      const supabase = getSupabaseBrowserClient();
+      const { data: sessionData } = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+      const accessToken = sessionData.session?.access_token;
+
+      if (!accessToken) {
+        setSaveMessage("Bạn chưa đăng nhập, kết quả chỉ hiển thị tạm thời.");
+        return;
+      }
+
+      setSaving(true);
+      const response = await fetch("/api/results", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({
           subjectId,
           score,
@@ -103,8 +118,9 @@ const ExamPage: NextPage = () => {
           timeSpent,
         }),
       });
+      if (!response.ok) setSaveMessage("Không thể lưu kết quả. Vui lòng thử lại sau.");
     } catch {
-      // ignore save error
+      setSaveMessage("Không thể lưu kết quả. Vui lòng thử lại sau.");
     } finally {
       setSaving(false);
     }
@@ -166,6 +182,7 @@ const ExamPage: NextPage = () => {
             </div>
           </div>
           {saving && <p className="saving-text">Đang lưu kết quả...</p>}
+          {saveMessage && <p className="saving-text">{saveMessage}</p>}
           {result.details.map((d, i) => (
             <div
               key={i}
