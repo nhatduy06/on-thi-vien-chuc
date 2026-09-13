@@ -7,14 +7,11 @@ import { Category } from '../lib/mock';
 import { getCategories } from '../lib/db';
 import {
   ArrowRight,
-  Bell,
-  BookOpen,
   BookOpenCheck,
   CheckCircle2,
   ClipboardCheck,
   Clock3,
   ListChecks,
-  Lightbulb,
   MonitorSmartphone,
   Trophy,
 } from 'lucide-react';
@@ -93,15 +90,12 @@ const Home: NextPage<HomeProps> = ({ initialCategories }) => {
             <h2 id="updates-title">Cập nhật mới nhất</h2>
             <div className="home-article-list">
               <a href="#categories" className="home-article">
-                <span className="home-article-icon article-book"><BookOpen size={20} aria-hidden="true" /></span>
                 <span><strong>Khởi động lộ trình ôn thi viên chức</strong><small>Bắt đầu từ những chủ đề trọng tâm</small><time dateTime="2026-03-18">18/03/2026</time></span>
               </a>
               <a href="#study-flow" className="home-article">
-                <span className="home-article-icon article-tip"><Lightbulb size={20} aria-hidden="true" /></span>
                 <span><strong>Bí quyết ghi nhớ kiến thức lâu hơn</strong><small>Chia nhỏ nội dung và luyện tập đều đặn</small><time dateTime="2026-03-12">12/03/2026</time></span>
               </a>
               <a href="#features" className="home-article">
-                <span className="home-article-icon article-notice"><Bell size={20} aria-hidden="true" /></span>
                 <span><strong>Cập nhật ngân hàng câu hỏi mới</strong><small>Bổ sung nội dung ôn tập theo chủ đề</small><time dateTime="2026-03-05">05/03/2026</time></span>
               </a>
             </div>

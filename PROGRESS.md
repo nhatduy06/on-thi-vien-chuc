@@ -78,7 +78,7 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 - [ ] Import JSON
 - [ ] Import Excel / CSV
 - [ ] Kiểm tra dữ liệu trước khi nhập
-- [x] Đồng bộ dữ liệu vào Supabase
+- [x] Đồng bộ dữ liệu vào Supabase 
 
 #### Feature 6.4 - Thống kê
 - [ ] Thống kê số lượt làm bài
