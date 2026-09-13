@@ -44,7 +44,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title = 'Web ôn thi viên ch
              <Link href="/#features" className="nav-link" onClick={() => setMenuOpen(false)}>Tính năng</Link>
            </nav>
            <div className="header-actions">
-             <Link href="/login" className="header-login" onClick={() => setMenuOpen(false)}>Đăng nhập</Link>
+              <Link href="/profile" className="header-login" onClick={() => setMenuOpen(false)}>Tài khoản</Link>
              <Link href="/login?mode=signup" className="header-register" onClick={() => setMenuOpen(false)}>Đăng ký</Link>
              <Link href="/#categories" className="header-cta" onClick={() => setMenuOpen(false)}>Thi thử miễn phí <ArrowRight size={14} /></Link>
            </div>

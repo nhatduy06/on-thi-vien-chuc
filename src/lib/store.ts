@@ -23,6 +23,11 @@ export interface ExamResultAnswer {
   isCorrect: boolean;
 }
 
+export interface ResultReview {
+  result: ExamResult;
+  details: Array<{ question: Question; selected: string; isCorrect: boolean }>;
+}
+
 const CATEGORY_COLUMNS = 'id, name, slug, description, icon, display_order';
 const SUBJECT_COLUMNS = 'id, category_id, name, slug, description, display_order';
 const QUESTION_COLUMNS = 'id, subject_id, content, option_a, option_b, option_c, option_d, correct_answer, explanation, difficulty';
@@ -438,6 +443,24 @@ export async function listResults(): Promise<ExamResult[]> {
   return [...getState().results].sort((a, b) => b.id - a.id);
 }
 
+export async function listResultsByUser(userId: string): Promise<ExamResult[]> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db
+      .from('exam_results')
+      .select('id, user_id, subject_id, score, total_questions, correct_answers, time_spent, completed_at, subjects(name)')
+      .eq('user_id', userId)
+      .order('id', { ascending: false });
+    throwIfError(error);
+    return ((data ?? []) as Array<Record<string, unknown>>).map((row) => {
+      const relation = row.subjects as { name?: string } | Array<{ name?: string }> | null;
+      const subject = Array.isArray(relation) ? relation[0] : relation;
+      return mapResult(row, subject?.name || '');
+    });
+  }
+  return (await listResults()).filter((result) => result.userId === userId);
+}
+
 export async function createResult(input: Omit<ExamResult, 'id' | 'completedAt' | 'subjectName'> & { userId: string }): Promise<ExamResult> {
   const db = getSupabase();
   if (db && !shouldUseFallback()) {
@@ -503,6 +526,20 @@ export async function listResultAnswers(): Promise<ExamResultAnswer[]> {
     return ((data ?? []) as Array<Record<string, unknown>>).map((row) => ({ id: Number(row.id), resultId: Number(row.result_id), questionId: Number(row.question_id), selectedAnswer: String(row.selected_answer), isCorrect: Boolean(row.is_correct) }));
   }
   return [...getState().resultAnswers];
+}
+
+export async function getResultReview(userId: string, resultId: number): Promise<ResultReview | null> {
+  const result = (await listResultsByUser(userId)).find((item) => item.id === resultId);
+  if (!result) return null;
+  const [questions, answers] = await Promise.all([listQuestions(result.subjectId), listResultAnswers()]);
+  const answersByQuestion = new Map(answers.filter((answer) => answer.resultId === resultId).map((answer) => [answer.questionId, answer]));
+  return {
+    result,
+    details: questions.map((question) => {
+      const answer = answersByQuestion.get(question.id);
+      return { question, selected: answer?.selectedAnswer || '', isCorrect: Boolean(answer?.isCorrect) };
+    }),
+  };
 }
 
 // ===== STATS (dashboard) =====
