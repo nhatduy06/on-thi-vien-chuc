@@ -98,6 +98,16 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 - [ ] Khôi phục dữ liệu (Restore)
 - [ ] Nhật ký hoạt động (Audit Log)
 - [ ] Thiết lập hệ thống
+
+#### Feature 6.7 - Quản lý bài viết cập nhật
+- [x] CRUD bài viết trong Admin CMS
+- [x] Trang danh sách bài viết theo thời gian mới nhất
+- [x] Trang chi tiết bài viết công khai
+
+#### Feature 6.8 - Trải nghiệm làm bài
+- [x] Phân trang 10 câu hỏi mỗi trang
+- [x] Sidebar điều hướng toàn bộ câu hỏi
+- [x] Hiển thị trạng thái đã/chưa trả lời
 ---
 
 ## Ghi chú
@@ -110,6 +120,8 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
   - `GET /api/questions?subjectId=1` — Trả về câu hỏi theo chủ đề
   - `POST /api/results` — Lưu kết quả bài thi
   - `GET /api/admin/stats` — Thống kê dashboard (cần đăng nhập admin)
+  - `GET /api/articles` — Danh sách bài viết đã xuất bản
+  - `CRUD /api/admin/articles` — Quản lý bài viết (cần đăng nhập admin)
   - `CRUD /api/admin/*` — Quản lý categories, subjects, questions, results
 - **Các tệp đã tạo:**
   - `src/lib/db.ts` — Lớp truy cập Supabase, tự động fallback mock khi local chưa cấu hình
@@ -123,4 +135,4 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
   - `NEXT_PUBLIC_SUPABASE_URL` — URL Supabase cho client-side
   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Anon key cho client-side
   - `ADMIN_PASSWORD` — Mật khẩu admin CMS
-- **Bước tiếp theo:** Đo lại PageSpeed sau deploy, tiếp tục tối ưu API nếu cần, rồi hoàn thiện Giai đoạn 6.4 (Thống kê chi tiết), Giai đoạn 6.5 (Quản lý người dùng) và Giai đoạn 4 (Bài tập điền khuyết).
+- **Bước tiếp theo:** Chạy phần bổ sung `articles` trong `supabase/schema.sql` và `supabase/seed.sql`, deploy lại, sau đó đo PageSpeed và hoàn thiện Giai đoạn 6.4 (Thống kê chi tiết), Giai đoạn 6.5 (Quản lý người dùng) và Giai đoạn 4 (Bài tập điền khuyết).

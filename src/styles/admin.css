@@ -63,6 +63,8 @@
 .admin-filter-bar .form-select, .admin-filter-bar .form-input { width: auto; min-width: 160px; padding: 8px 10px; font-size: 0.8rem; }
 .admin-empty { padding: 46px 20px; color: var(--ink-muted); text-align: center; }
 .admin-empty-icon { margin-bottom: 8px; font-size: 1.8rem; }
+.article-admin-excerpt { max-width: 480px; overflow: hidden; color: var(--ink-muted); font-size: .76rem; text-overflow: ellipsis; white-space: nowrap; }
+.admin-checkbox { display: flex !important; align-items: center; gap: 8px; min-height: 38px; color: var(--ink-soft); font-size: .82rem !important; font-weight: 500 !important; }
 .actions-cell { display: flex; justify-content: flex-end; gap: 5px; }
 .btn-icon { display: inline-flex; align-items: center; justify-content: center; width: 29px; height: 29px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); cursor: pointer; font-size: 0.78rem; }
 .btn-icon:hover { border-color: #aaa7e4; background: var(--primary-soft); }

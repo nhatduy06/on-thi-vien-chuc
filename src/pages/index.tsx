@@ -3,8 +3,9 @@ import Image from 'next/image';
 import { useState, type ReactNode } from 'react';
 import Layout from '../components/Layout';
 import CategoryCard from '../components/CategoryCard';
-import { Category } from '../lib/mock';
+import { Article, Category } from '../lib/mock';
 import { getCategories } from '../lib/db';
+import { listArticles } from '../lib/store';
 import {
   ArrowRight,
   BookOpenCheck,
@@ -18,9 +19,10 @@ import {
 
 interface HomeProps {
   initialCategories: Category[];
+  initialArticles: Article[];
 }
 
-const Home: NextPage<HomeProps> = ({ initialCategories }) => {
+const Home: NextPage<HomeProps> = ({ initialCategories, initialArticles }) => {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,17 +91,9 @@ const Home: NextPage<HomeProps> = ({ initialCategories }) => {
           <div className="home-updates-panel" aria-labelledby="updates-title">
             <h2 id="updates-title">Cập nhật mới nhất</h2>
             <div className="home-article-list">
-              <a href="#categories" className="home-article">
-                <span><strong>Khởi động lộ trình ôn thi viên chức</strong><small>Bắt đầu từ những chủ đề trọng tâm</small><time dateTime="2026-03-18">18/03/2026</time></span>
-              </a>
-              <a href="#study-flow" className="home-article">
-                <span><strong>Bí quyết ghi nhớ kiến thức lâu hơn</strong><small>Chia nhỏ nội dung và luyện tập đều đặn</small><time dateTime="2026-03-12">12/03/2026</time></span>
-              </a>
-              <a href="#features" className="home-article">
-                <span><strong>Cập nhật ngân hàng câu hỏi mới</strong><small>Bổ sung nội dung ôn tập theo chủ đề</small><time dateTime="2026-03-05">05/03/2026</time></span>
-              </a>
+              {initialArticles.slice(0, 3).map((article) => <a href={`/articles/${article.id}`} className="home-article" key={article.id}><span><strong>{article.title}</strong><small>{article.excerpt}</small><time dateTime={article.published_at}>{new Date(article.published_at).toLocaleDateString('vi-VN')}</time></span></a>)}
             </div>
-            <a href="#categories" className="home-articles-link">Xem tất cả bài viết <ArrowRight size={15} aria-hidden="true" /></a>
+            <a href="/articles" className="home-articles-link">Xem tất cả bài viết <ArrowRight size={15} aria-hidden="true" /></a>
           </div>
           <div className="home-feature-copy"><h2 id="features-title">Tự tin hơn sau mỗi lần làm bài</h2><div className="home-feature-list"><FeatureItem icon={<CheckCircle2 size={19} aria-hidden="true" />} title="Chấm điểm & phân tích tự động" /><FeatureItem icon={<Clock3 size={19} aria-hidden="true" />} title="Mô phỏng thời gian thực" /><FeatureItem icon={<MonitorSmartphone size={19} aria-hidden="true" />} title="Học trên mọi thiết bị" /></div></div>
         </section>
@@ -121,6 +115,6 @@ function FeatureItem({ icon, title }: { icon: ReactNode; title: string }) {
 export default Home;
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => ({
-  props: { initialCategories: await getCategories() },
+  props: { initialCategories: await getCategories(), initialArticles: await listArticles() },
   revalidate: 60,
 });

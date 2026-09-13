@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { CircleHelp, FileText, Globe2, LayoutDashboard, Library, LogOut, Menu, Trophy } from 'lucide-react';
+import { CircleHelp, FileText, Globe2, LayoutDashboard, Library, LogOut, Menu, Newspaper, Trophy } from 'lucide-react';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { href: '/admin/categories', label: 'Danh mục', icon: Library, exact: false },
   { href: '/admin/subjects', label: 'Chủ đề', icon: FileText, exact: false },
   { href: '/admin/questions', label: 'Câu hỏi', icon: CircleHelp, exact: false },
+  { href: '/admin/articles', label: 'Bài viết', icon: Newspaper, exact: false },
   { href: '/admin/results', label: 'Kết quả thi', icon: Trophy, exact: false },
 ];
 

@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { mockCategories, mockSubjects, mockQuestions, Category, Subject, Question } from './mock';
+import { mockArticles, mockCategories, mockSubjects, mockQuestions, Article, Category, Subject, Question } from './mock';
 
 export interface ExamResult {
   id: number;
@@ -17,6 +17,7 @@ export interface ExamResult {
 const CATEGORY_COLUMNS = 'id, name, slug, description, icon, display_order';
 const SUBJECT_COLUMNS = 'id, category_id, name, slug, description, display_order';
 const QUESTION_COLUMNS = 'id, subject_id, content, option_a, option_b, option_c, option_d, correct_answer, explanation, difficulty';
+const ARTICLE_COLUMNS = 'id, title, excerpt, content, is_published, published_at, created_at, updated_at';
 
 function getSupabase(): SupabaseClient | null {
   const url = process.env.SUPABASE_URL;
@@ -178,6 +179,67 @@ export async function deleteCategory(id: number): Promise<boolean> {
   state.questions = state.questions.filter((question) => !subjectIds.includes(question.subject_id));
   state.subjects = state.subjects.filter((subject) => subject.category_id !== id);
   state.categories.splice(index, 1);
+  return true;
+}
+
+// ===== ARTICLES =====
+export async function listArticles(includeUnpublished = false): Promise<Article[]> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    let query = db.from('articles').select(ARTICLE_COLUMNS).order('published_at', { ascending: false });
+    if (!includeUnpublished) query = query.eq('is_published', true);
+    const { data, error } = await query;
+    throwIfError(error);
+    return (data ?? []) as Article[];
+  }
+
+  return [...mockArticles]
+    .filter((article) => includeUnpublished || article.is_published)
+    .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
+}
+
+export async function createArticle(input: Omit<Article, 'id' | 'created_at' | 'updated_at'>): Promise<Article> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('articles').insert(input).select(ARTICLE_COLUMNS).single();
+    throwIfError(error);
+    return data as Article;
+  }
+
+  const now = new Date().toISOString();
+  const item: Article = { ...input, id: Math.max(0, ...mockArticles.map((article) => article.id)) + 1, created_at: now, updated_at: now };
+  mockArticles.push(item);
+  return item;
+}
+
+export async function updateArticle(id: number, input: Partial<Article>): Promise<Article | null> {
+  const current = (await listArticles(true)).find((article) => article.id === id);
+  if (!current) return null;
+  const merged = { ...current, ...input, id, updated_at: new Date().toISOString() };
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('articles').update({ title: merged.title, excerpt: merged.excerpt, content: merged.content, is_published: merged.is_published, published_at: merged.published_at, updated_at: merged.updated_at }).eq('id', id).select(ARTICLE_COLUMNS).maybeSingle();
+    throwIfError(error);
+    return (data as Article | null) ?? null;
+  }
+
+  const index = mockArticles.findIndex((article) => article.id === id);
+  if (index === -1) return null;
+  mockArticles[index] = merged;
+  return merged;
+}
+
+export async function deleteArticle(id: number): Promise<boolean> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('articles').delete().eq('id', id).select('id');
+    throwIfError(error);
+    return (data ?? []).length > 0;
+  }
+
+  const index = mockArticles.findIndex((article) => article.id === id);
+  if (index === -1) return false;
+  mockArticles.splice(index, 1);
   return true;
 }
 

@@ -30,6 +30,17 @@ export interface Question {
   difficulty: 'easy' | 'medium' | 'hard';
 }
 
+export interface Article {
+  id: number;
+  title: string;
+  excerpt: string;
+  content: string;
+  is_published: boolean;
+  published_at: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export const mockCategories: Category[] = [
   { id: 1, name: 'Kiến thức chung', slug: 'kien-thuc-chung', description: 'Các kiến thức cơ bản về quản lý nhà nước, pháp luật...', icon: 'book-open', display_order: 1 },
   { id: 2, name: 'Luật viên chức', slug: 'luat-vien-chuc', description: 'Luật viên chức năm 2026, quyền và nghĩa vụ...', icon: 'landmark', display_order: 2 },
@@ -53,4 +64,10 @@ export const mockQuestions: Question[] = [
   { id: 6, subject_id: 3, content: 'Theo Luật viên chức, viên chức là gì?', option_a: 'Người làm việc trong cơ quan nhà nước', option_b: 'Người được tuyển dụng theo vị trí việc làm, làm việc tại đơn vị sự nghiệp công lập', option_c: 'Người làm việc trong doanh nghiệp nhà nước', option_d: 'Người làm việc theo hợp đồng lao động', correct_answer: 'B', explanation: 'Viên chức là người được tuyển dụng theo vị trí việc làm tại đơn vị sự nghiệp công lập.', difficulty: 'easy' },
   { id: 7, subject_id: 3, content: 'Hợp đồng làm việc của viên chức có mấy loại?', option_a: '1 loại', option_b: '2 loại', option_c: '3 loại', option_d: '4 loại', correct_answer: 'B', explanation: 'Có 2 loại: hợp đồng không xác định thời hạn và hợp đồng xác định thời hạn.', difficulty: 'medium' },
   { id: 8, subject_id: 3, content: 'Quyền nào sau đây không thuộc quyền của viên chức?', option_a: 'Quyền đình công', option_b: 'Quyền được bảo đảm lương', option_c: 'Quyền được đào tạo', option_d: 'Quyền được nghỉ ngơi', correct_answer: 'A', explanation: 'Viên chức không có quyền đình công theo quy định của pháp luật.', difficulty: 'hard' },
+];
+
+export const mockArticles: Article[] = [
+  { id: 1, title: 'Khởi động lộ trình ôn thi viên chức', excerpt: 'Bắt đầu từ những chủ đề trọng tâm để xây dựng nền tảng vững chắc.', content: 'Chọn một chủ đề phù hợp, làm bài đều đặn và xem lại các câu trả lời sau mỗi phiên ôn tập.', is_published: true, published_at: '2026-03-18T08:00:00.000Z', created_at: '2026-03-18T08:00:00.000Z', updated_at: '2026-03-18T08:00:00.000Z' },
+  { id: 2, title: 'Bí quyết ghi nhớ kiến thức lâu hơn', excerpt: 'Chia nhỏ nội dung và luyện tập đều đặn để ghi nhớ hiệu quả hơn.', content: 'Kết hợp đọc hiểu, làm câu hỏi và ghi chú những phần còn chưa chắc sau mỗi buổi học.', is_published: true, published_at: '2026-03-12T08:00:00.000Z', created_at: '2026-03-12T08:00:00.000Z', updated_at: '2026-03-12T08:00:00.000Z' },
+  { id: 3, title: 'Cập nhật ngân hàng câu hỏi mới', excerpt: 'Bổ sung nội dung ôn tập theo từng chủ đề thi.', content: 'Theo dõi các chủ đề mới được cập nhật để mở rộng phạm vi luyện tập và chuẩn bị tốt hơn cho kỳ thi.', is_published: true, published_at: '2026-03-05T08:00:00.000Z', created_at: '2026-03-05T08:00:00.000Z', updated_at: '2026-03-05T08:00:00.000Z' },
 ];

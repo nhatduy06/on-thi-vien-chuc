@@ -52,3 +52,12 @@ where not exists (
   select 1 from public.questions q
   where q.subject_id = s.id and q.content = seed.content
 );
+
+insert into public.articles (title, excerpt, content, is_published, published_at)
+select seed.title, seed.excerpt, seed.content, true, seed.published_at::timestamptz
+from (values
+  ('Khởi động lộ trình ôn thi viên chức', 'Bắt đầu từ những chủ đề trọng tâm để xây dựng nền tảng vững chắc.', 'Chọn một chủ đề phù hợp, làm bài đều đặn và xem lại các câu trả lời sau mỗi phiên ôn tập.', '2026-03-18T08:00:00Z'),
+  ('Bí quyết ghi nhớ kiến thức lâu hơn', 'Chia nhỏ nội dung và luyện tập đều đặn để ghi nhớ hiệu quả hơn.', 'Kết hợp đọc hiểu, làm câu hỏi và ghi chú những phần còn chưa chắc sau mỗi buổi học.', '2026-03-12T08:00:00Z'),
+  ('Cập nhật ngân hàng câu hỏi mới', 'Bổ sung nội dung ôn tập theo từng chủ đề thi.', 'Theo dõi các chủ đề mới được cập nhật để mở rộng phạm vi luyện tập và chuẩn bị tốt hơn cho kỳ thi.', '2026-03-05T08:00:00Z')
+) as seed(title, excerpt, content, published_at)
+where not exists (select 1 from public.articles a where a.title = seed.title);
