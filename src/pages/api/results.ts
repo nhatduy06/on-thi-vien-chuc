@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       return res.status(401).json({ success: false, message: 'Vui lòng đăng nhập để lưu kết quả' });
     }
 
-    const { subjectId, score, totalQuestions, correctAnswers, timeSpent } = req.body;
+    const { subjectId, score, totalQuestions, correctAnswers, timeSpent, answers } = req.body;
     if (!subjectId || isNaN(Number(subjectId))) {
       return res.status(400).json({ success: false, message: 'subjectId không hợp lệ' });
     }
@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       totalQuestions: Number(totalQuestions) || 0,
       correctAnswers: Number(correctAnswers) || 0,
       timeSpent: Number(timeSpent) || 0,
+      answers: answers && typeof answers === 'object' ? answers : {},
     });
     return res.status(200).json({ success: true, data: result, message: 'Kết quả đã được lưu' });
   } catch {

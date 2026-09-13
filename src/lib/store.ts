@@ -5,6 +5,7 @@ import { mockArticles, mockCategories, mockSubjects, mockQuestions, Article, Cat
 export interface ExamResult {
   id: number;
   userId: string | null;
+  answers?: Record<number, string>;
   subjectId: number;
   subjectName: string;
   score: number;
@@ -12,6 +13,14 @@ export interface ExamResult {
   correctAnswers: number;
   timeSpent: number;
   completedAt: string;
+}
+
+export interface ExamResultAnswer {
+  id: number;
+  resultId: number;
+  questionId: number;
+  selectedAnswer: string;
+  isCorrect: boolean;
 }
 
 const CATEGORY_COLUMNS = 'id, name, slug, description, icon, display_order';
@@ -47,10 +56,12 @@ interface StoreState {
   subjects: Subject[];
   questions: Question[];
   results: ExamResult[];
+  resultAnswers: ExamResultAnswer[];
   nextCategoryId: number;
   nextSubjectId: number;
   nextQuestionId: number;
   nextResultId: number;
+  nextResultAnswerId: number;
 }
 
 function getState(): StoreState {
@@ -61,10 +72,12 @@ function getState(): StoreState {
       subjects: [...mockSubjects],
       questions: [...mockQuestions],
       results: [],
+      resultAnswers: [],
       nextCategoryId: Math.max(...mockCategories.map((c) => c.id)) + 1,
       nextSubjectId: Math.max(...mockSubjects.map((s) => s.id)) + 1,
       nextQuestionId: Math.max(...mockQuestions.map((q) => q.id)) + 1,
       nextResultId: 1,
+      nextResultAnswerId: 1,
     };
   }
   return g.__cmsStore;
@@ -435,6 +448,30 @@ export async function createResult(input: Omit<ExamResult, 'id' | 'completedAt' 
       .single();
     throwIfError(error);
 
+    const answerEntries = Object.entries(input.answers || {});
+    if (answerEntries.length > 0) {
+      const questionIds = answerEntries.map(([questionId]) => Number(questionId)).filter(Number.isInteger);
+      const { data: questionRows, error: questionError } = await db
+        .from('questions')
+        .select('id, correct_answer')
+        .eq('subject_id', input.subjectId)
+        .in('id', questionIds);
+      throwIfError(questionError);
+      const correctById = new Map((questionRows ?? []).map((question) => [Number(question.id), String(question.correct_answer)]));
+      const answerRows = answerEntries
+        .map(([questionId, selectedAnswer]) => {
+          const id = Number(questionId);
+          const correctAnswer = correctById.get(id);
+          if (!correctAnswer || !selectedAnswer) return null;
+          return { result_id: Number((data as Record<string, unknown>).id), question_id: id, selected_answer: selectedAnswer, is_correct: selectedAnswer === correctAnswer };
+        })
+        .filter((answer): answer is { result_id: number; question_id: number; selected_answer: string; is_correct: boolean } => Boolean(answer));
+      if (answerRows.length > 0) {
+        const { error: answerError } = await db.from('exam_result_answers').insert(answerRows);
+        throwIfError(answerError);
+      }
+    }
+
     const { data: subject, error: subjectError } = await db.from('subjects').select('name').eq('id', input.subjectId).maybeSingle();
     throwIfError(subjectError);
     return mapResult(data as Record<string, unknown>, (subject as { name?: string } | null)?.name || '');
@@ -449,26 +486,82 @@ export async function createResult(input: Omit<ExamResult, 'id' | 'completedAt' 
     completedAt: new Date().toISOString(),
   };
   state.results.push(item);
+  const questionById = new Map(state.questions.filter((question) => question.subject_id === input.subjectId).map((question) => [question.id, question]));
+  for (const [questionId, selectedAnswer] of Object.entries(input.answers || {})) {
+    const question = questionById.get(Number(questionId));
+    if (!question || !selectedAnswer) continue;
+    state.resultAnswers.push({ id: state.nextResultAnswerId++, resultId: item.id, questionId: question.id, selectedAnswer, isCorrect: selectedAnswer === question.correct_answer });
+  }
   return item;
+}
+
+export async function listResultAnswers(): Promise<ExamResultAnswer[]> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('exam_result_answers').select('id, result_id, question_id, selected_answer, is_correct');
+    throwIfError(error);
+    return ((data ?? []) as Array<Record<string, unknown>>).map((row) => ({ id: Number(row.id), resultId: Number(row.result_id), questionId: Number(row.question_id), selectedAnswer: String(row.selected_answer), isCorrect: Boolean(row.is_correct) }));
+  }
+  return [...getState().resultAnswers];
 }
 
 // ===== STATS (dashboard) =====
 export async function getStats() {
-  const [categories, subjects, questions, results] = await Promise.all([
+  const [categories, subjects, questions, results, resultAnswers] = await Promise.all([
     listCategories(),
     listSubjects(),
     listQuestions(),
     listResults(),
+    listResultAnswers(),
   ]);
   const totalResults = results.length;
   const avgScore = totalResults > 0
     ? Math.round((results.reduce((sum, result) => sum + result.score, 0) / totalResults) * 10) / 10
     : 0;
+  const subjectStats = subjects.map((subject) => {
+    const subjectResults = results.filter((result) => result.subjectId === subject.id);
+    const subjectAverage = subjectResults.length > 0 ? subjectResults.reduce((sum, result) => sum + result.score, 0) / subjectResults.length : 0;
+    const subjectCorrect = subjectResults.reduce((sum, result) => sum + result.correctAnswers, 0);
+    const subjectTotal = subjectResults.reduce((sum, result) => sum + result.totalQuestions, 0);
+    return { subjectId: subject.id, subjectName: subject.name, attempts: subjectResults.length, avgScore: Math.round(subjectAverage * 10) / 10, accuracy: subjectTotal > 0 ? Math.round((subjectCorrect / subjectTotal) * 100) : 0 };
+  }).filter((subject) => subject.attempts > 0).sort((a, b) => b.attempts - a.attempts);
+
+  const questionMap = new Map(questions.map((question) => [question.id, question]));
+  const missedMap = new Map<number, { attempts: number; wrong: number }>();
+  for (const answer of resultAnswers) {
+    const current = missedMap.get(answer.questionId) || { attempts: 0, wrong: 0 };
+    current.attempts += 1;
+    if (!answer.isCorrect) current.wrong += 1;
+    missedMap.set(answer.questionId, current);
+  }
+  const mostMissedQuestions = [...missedMap.entries()]
+    .map(([questionId, stats]) => {
+      const question = questionMap.get(questionId);
+      const subject = subjects.find((item) => item.id === question?.subject_id);
+      return { questionId, content: question?.content || `Câu hỏi #${questionId}`, subjectName: subject?.name || 'Không xác định', attempts: stats.attempts, wrongAnswers: stats.wrong, wrongRate: Math.round((stats.wrong / stats.attempts) * 100) };
+    })
+    .sort((a, b) => b.wrongAnswers - a.wrongAnswers || b.wrongRate - a.wrongRate)
+    .slice(0, 10);
+
+  const dayMap = new Map<string, { attempts: number; scoreTotal: number }>();
+  for (const result of results) {
+    const date = result.completedAt.slice(0, 10);
+    const current = dayMap.get(date) || { attempts: 0, scoreTotal: 0 };
+    current.attempts += 1;
+    current.scoreTotal += result.score;
+    dayMap.set(date, current);
+  }
+  const attemptsByDay = [...dayMap.entries()].sort(([a], [b]) => a.localeCompare(b)).slice(-14).map(([date, stats]) => ({ date, attempts: stats.attempts, avgScore: Math.round((stats.scoreTotal / stats.attempts) * 10) / 10 }));
+
   return {
     categories: categories.length,
     subjects: subjects.length,
     questions: questions.length,
     results: totalResults,
     avgScore,
+    attemptsByDay,
+    subjectStats,
+    mostMissedQuestions,
+    trackedAnswers: resultAnswers.length,
   };
 }

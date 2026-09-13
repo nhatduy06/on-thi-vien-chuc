@@ -81,9 +81,9 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 - [x] Đồng bộ dữ liệu vào Supabase 
 
 #### Feature 6.4 - Thống kê
-- [ ] Thống kê số lượt làm bài
-- [ ] Thống kê điểm trung bình
-- [ ] Thống kê câu hỏi làm sai nhiều nhất
+- [x] Thống kê số lượt làm bài theo 14 ngày gần nhất
+- [x] Thống kê điểm trung bình tổng thể và theo chủ đề
+- [x] Thống kê câu hỏi làm sai nhiều nhất
 - [x] Dashboard tổng quan
 
 #### Feature 6.5 - Quản lý người dùng
@@ -127,6 +127,7 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
   - `src/lib/db.ts` — Lớp truy cập Supabase, tự động fallback mock khi local chưa cấu hình
   - `src/lib/store.ts` — Data access layer với Supabase + in-memory fallback
   - `src/lib/admin-auth.ts` — HMAC-signed HttpOnly cookie cho admin session
+  - `src/pages/admin/index.tsx` — Dashboard thống kê lượt thi, chủ đề và câu sai
   - `supabase/schema.sql` — Schema PostgreSQL
   - `supabase/seed.sql` — Seed categories, subjects và câu hỏi ban đầu
 - **Environment Variables trên Vercel:**
@@ -135,4 +136,4 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
   - `NEXT_PUBLIC_SUPABASE_URL` — URL Supabase cho client-side
   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Anon key cho client-side
   - `ADMIN_PASSWORD` — Mật khẩu admin CMS
-- **Bước tiếp theo:** Chạy phần bổ sung `articles` trong `supabase/schema.sql` và `supabase/seed.sql`, deploy lại, sau đó đo PageSpeed và hoàn thiện Giai đoạn 6.4 (Thống kê chi tiết), Giai đoạn 6.5 (Quản lý người dùng) và Giai đoạn 4 (Bài tập điền khuyết).
+- **Bước tiếp theo:** Chạy phần bổ sung `articles` và `exam_result_answers` trong `supabase/schema.sql`, deploy lại, sau đó đo PageSpeed và hoàn thiện Giai đoạn 6.5 (Quản lý người dùng) và Giai đoạn 4 (Bài tập điền khuyết).

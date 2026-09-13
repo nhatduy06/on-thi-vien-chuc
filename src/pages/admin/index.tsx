@@ -4,7 +4,7 @@ import Link from 'next/link';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { readJson } from '../../lib/http';
 import { hasValidAdminSession } from '../../lib/admin-auth';
-import { Award, BarChart3, CircleHelp, FileText, Library } from 'lucide-react';
+import { AlertTriangle, Award, BarChart3, CircleHelp, FileText, Library, TrendingUp } from 'lucide-react';
 
 interface Stats {
   categories: number;
@@ -12,6 +12,10 @@ interface Stats {
   questions: number;
   results: number;
   avgScore: number;
+  attemptsByDay: { date: string; attempts: number; avgScore: number }[];
+  subjectStats: { subjectId: number; subjectName: string; attempts: number; avgScore: number; accuracy: number }[];
+  mostMissedQuestions: { questionId: number; content: string; subjectName: string; attempts: number; wrongAnswers: number; wrongRate: number }[];
+  trackedAnswers: number;
 }
 
 interface RecentResult {
@@ -147,6 +151,22 @@ const Dashboard: NextPage = () => {
                 </table>
               </div>
             )}
+          </div>
+
+          <div className="admin-analytics-grid">
+            <div className="admin-panel analytics-panel">
+              <div className="admin-panel-header"><h2 className="admin-panel-title"><TrendingUp size={16} /> Lượt thi 14 ngày gần nhất</h2></div>
+              {stats.attemptsByDay.length === 0 ? <div className="admin-empty"><p>Chưa có dữ liệu lượt thi.</p></div> : <div className="activity-chart">{stats.attemptsByDay.map((day) => { const max = Math.max(...stats.attemptsByDay.map((item) => item.attempts), 1); return <div className="activity-column" key={day.date}><span className="activity-value">{day.attempts}</span><div className="activity-bar" style={{ height: `${Math.max(10, (day.attempts / max) * 100)}%` }} /><small>{new Date(`${day.date}T00:00:00`).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })}</small></div>; })}</div>}
+            </div>
+            <div className="admin-panel analytics-panel">
+              <div className="admin-panel-header"><h2 className="admin-panel-title"><BarChart3 size={16} /> Hiệu quả theo chủ đề</h2></div>
+              {stats.subjectStats.length === 0 ? <div className="admin-empty"><p>Chưa có dữ liệu theo chủ đề.</p></div> : <div className="admin-table-wrap"><table className="admin-table compact-table"><thead><tr><th>Chủ đề</th><th>Lượt thi</th><th>Điểm TB</th><th>Đúng</th></tr></thead><tbody>{stats.subjectStats.map((subject) => <tr key={subject.subjectId}><td>{subject.subjectName}</td><td>{subject.attempts}</td><td><span className="badge badge-primary">{subject.avgScore}/10</span></td><td>{subject.accuracy}%</td></tr>)}</tbody></table></div>}
+            </div>
+          </div>
+
+          <div className="admin-panel analytics-panel missed-panel">
+            <div className="admin-panel-header"><h2 className="admin-panel-title"><AlertTriangle size={16} /> Câu hỏi sai nhiều nhất</h2><span className="analytics-note">Đã phân tích {stats.trackedAnswers} lượt trả lời</span></div>
+            {stats.mostMissedQuestions.length === 0 ? <div className="admin-empty"><p>Chưa có dữ liệu đáp án chi tiết. Dữ liệu sẽ xuất hiện sau các lượt thi mới.</p></div> : <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Câu hỏi</th><th>Chủ đề</th><th>Lượt trả lời</th><th>Số lượt sai</th><th>Tỷ lệ sai</th></tr></thead><tbody>{stats.mostMissedQuestions.map((question) => <tr key={question.questionId}><td className="cell-truncate" style={{ maxWidth: 500 }} title={question.content}>{question.content}</td><td>{question.subjectName}</td><td>{question.attempts}</td><td><span className="badge badge-danger">{question.wrongAnswers}</span></td><td>{question.wrongRate}%</td></tr>)}</tbody></table></div>}
           </div>
         </>
       )}
