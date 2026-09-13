@@ -54,6 +54,7 @@ const Home: NextPage<HomeProps> = ({ initialCategories }) => {
             fill
             priority
             fetchPriority="high"
+            quality={60}
             sizes="100vw"
             aria-hidden="true"
           />
