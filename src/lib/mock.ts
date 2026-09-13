@@ -41,6 +41,16 @@ export interface Article {
   updated_at: string;
 }
 
+export interface FillInBlank {
+  id: number;
+  subject_id: number;
+  title: string;
+  content: string;
+  blanks: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export const mockCategories: Category[] = [
   { id: 1, name: 'Kiến thức chung', slug: 'kien-thuc-chung', description: 'Các kiến thức cơ bản về quản lý nhà nước, pháp luật...', icon: 'book-open', display_order: 1 },
   { id: 2, name: 'Luật viên chức', slug: 'luat-vien-chuc', description: 'Luật viên chức năm 2026, quyền và nghĩa vụ...', icon: 'landmark', display_order: 2 },
@@ -70,4 +80,8 @@ export const mockArticles: Article[] = [
   { id: 1, title: 'Khởi động lộ trình ôn thi viên chức', excerpt: 'Bắt đầu từ những chủ đề trọng tâm để xây dựng nền tảng vững chắc.', content: 'Chọn một chủ đề phù hợp, làm bài đều đặn và xem lại các câu trả lời sau mỗi phiên ôn tập.', is_published: true, published_at: '2026-03-18T08:00:00.000Z', created_at: '2026-03-18T08:00:00.000Z', updated_at: '2026-03-18T08:00:00.000Z' },
   { id: 2, title: 'Bí quyết ghi nhớ kiến thức lâu hơn', excerpt: 'Chia nhỏ nội dung và luyện tập đều đặn để ghi nhớ hiệu quả hơn.', content: 'Kết hợp đọc hiểu, làm câu hỏi và ghi chú những phần còn chưa chắc sau mỗi buổi học.', is_published: true, published_at: '2026-03-12T08:00:00.000Z', created_at: '2026-03-12T08:00:00.000Z', updated_at: '2026-03-12T08:00:00.000Z' },
   { id: 3, title: 'Cập nhật ngân hàng câu hỏi mới', excerpt: 'Bổ sung nội dung ôn tập theo từng chủ đề thi.', content: 'Theo dõi các chủ đề mới được cập nhật để mở rộng phạm vi luyện tập và chuẩn bị tốt hơn cho kỳ thi.', is_published: true, published_at: '2026-03-05T08:00:00.000Z', created_at: '2026-03-05T08:00:00.000Z', updated_at: '2026-03-05T08:00:00.000Z' },
+];
+
+export const mockFillInBlanks: FillInBlank[] = [
+  { id: 1, subject_id: 1, title: 'Hiến pháp và cơ quan quyền lực nhà nước', content: 'Theo Hiến pháp, {{1}} là cơ quan quyền lực nhà nước cao nhất của nước Cộng hòa xã hội chủ nghĩa Việt Nam. Cơ quan này thực hiện quyền {{2}} và quyết định những vấn đề quan trọng của đất nước.', blanks: JSON.stringify({ '1': 'Quốc hội', '2': 'lập hiến và lập pháp' }), created_at: '2026-03-01T08:00:00.000Z', updated_at: '2026-03-01T08:00:00.000Z' },
 ];

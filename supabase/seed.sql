@@ -61,3 +61,11 @@ from (values
   ('Cập nhật ngân hàng câu hỏi mới', 'Bổ sung nội dung ôn tập theo từng chủ đề thi.', 'Theo dõi các chủ đề mới được cập nhật để mở rộng phạm vi luyện tập và chuẩn bị tốt hơn cho kỳ thi.', '2026-03-05T08:00:00Z')
 ) as seed(title, excerpt, content, published_at)
 where not exists (select 1 from public.articles a where a.title = seed.title);
+
+insert into public.fill_in_blanks (subject_id, title, content, blanks)
+select s.id, seed.title, seed.content, seed.blanks
+from (values
+  ('phap-luat-dai-cuong', 'Hiến pháp và cơ quan quyền lực nhà nước', 'Theo Hiến pháp, {{1}} là cơ quan quyền lực nhà nước cao nhất của nước Cộng hòa xã hội chủ nghĩa Việt Nam. Cơ quan này thực hiện quyền {{2}} và quyết định những vấn đề quan trọng của đất nước.', '{"1":"Quốc hội","2":"lập hiến và lập pháp"}')
+) as seed(subject_slug, title, content, blanks)
+join public.subjects s on s.slug = seed.subject_slug
+where not exists (select 1 from public.fill_in_blanks f where f.subject_id = s.id and f.title = seed.title);

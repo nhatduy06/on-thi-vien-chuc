@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { mockArticles, mockCategories, mockSubjects, mockQuestions, Article, Category, Subject, Question } from './mock';
+import { mockArticles, mockCategories, mockFillInBlanks, mockSubjects, mockQuestions, Article, Category, FillInBlank, Subject, Question } from './mock';
 
 export interface ExamResult {
   id: number;
@@ -28,10 +28,21 @@ export interface ResultReview {
   details: Array<{ question: Question; selected: string; isCorrect: boolean }>;
 }
 
+export interface FillBlankResult {
+  id: number;
+  userId: string | null;
+  fillBlankId: number;
+  score: number;
+  totalBlanks: number;
+  correctBlanks: number;
+  completedAt: string;
+}
+
 const CATEGORY_COLUMNS = 'id, name, slug, description, icon, display_order';
 const SUBJECT_COLUMNS = 'id, category_id, name, slug, description, display_order';
 const QUESTION_COLUMNS = 'id, subject_id, content, option_a, option_b, option_c, option_d, correct_answer, explanation, difficulty';
 const ARTICLE_COLUMNS = 'id, title, excerpt, content, is_published, published_at, created_at, updated_at';
+const FILL_BLANK_COLUMNS = 'id, subject_id, title, content, blanks, created_at, updated_at';
 
 function getSupabase(): SupabaseClient | null {
   const url = process.env.SUPABASE_URL;
@@ -60,13 +71,17 @@ interface StoreState {
   categories: Category[];
   subjects: Subject[];
   questions: Question[];
+  fillInBlanks: FillInBlank[];
   results: ExamResult[];
+  fillBlankResults: FillBlankResult[];
   resultAnswers: ExamResultAnswer[];
   nextCategoryId: number;
   nextSubjectId: number;
   nextQuestionId: number;
   nextResultId: number;
   nextResultAnswerId: number;
+  nextFillInBlankId: number;
+  nextFillBlankResultId: number;
 }
 
 function getState(): StoreState {
@@ -76,13 +91,17 @@ function getState(): StoreState {
       categories: [...mockCategories],
       subjects: [...mockSubjects],
       questions: [...mockQuestions],
+      fillInBlanks: [...mockFillInBlanks],
       results: [],
+      fillBlankResults: [],
       resultAnswers: [],
       nextCategoryId: Math.max(...mockCategories.map((c) => c.id)) + 1,
       nextSubjectId: Math.max(...mockSubjects.map((s) => s.id)) + 1,
       nextQuestionId: Math.max(...mockQuestions.map((q) => q.id)) + 1,
       nextResultId: 1,
       nextResultAnswerId: 1,
+      nextFillInBlankId: Math.max(0, ...mockFillInBlanks.map((item) => item.id)) + 1,
+      nextFillBlankResultId: 1,
     };
   }
   return g.__cmsStore;
@@ -259,6 +278,74 @@ export async function deleteArticle(id: number): Promise<boolean> {
   if (index === -1) return false;
   mockArticles.splice(index, 1);
   return true;
+}
+
+// ===== FILL-IN-BLANK EXERCISES =====
+export async function listFillInBlanks(subjectId?: number): Promise<FillInBlank[]> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    let query = db.from('fill_in_blanks').select(FILL_BLANK_COLUMNS).order('id', { ascending: true });
+    if (subjectId !== undefined) query = query.eq('subject_id', subjectId);
+    const { data, error } = await query;
+    throwIfError(error);
+    return (data ?? []) as FillInBlank[];
+  }
+  return [...getState().fillInBlanks].filter((item) => subjectId === undefined || item.subject_id === subjectId);
+}
+
+export async function createFillInBlank(input: Omit<FillInBlank, 'id' | 'created_at' | 'updated_at'>): Promise<FillInBlank> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('fill_in_blanks').insert(input).select(FILL_BLANK_COLUMNS).single();
+    throwIfError(error);
+    return data as FillInBlank;
+  }
+  const now = new Date().toISOString();
+  const item: FillInBlank = { ...input, id: getState().nextFillInBlankId++, created_at: now, updated_at: now };
+  getState().fillInBlanks.push(item);
+  return item;
+}
+
+export async function updateFillInBlank(id: number, input: Partial<FillInBlank>): Promise<FillInBlank | null> {
+  const current = (await listFillInBlanks()).find((item) => item.id === id);
+  if (!current) return null;
+  const merged = { ...current, ...input, id, updated_at: new Date().toISOString() };
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('fill_in_blanks').update({ subject_id: merged.subject_id, title: merged.title, content: merged.content, blanks: merged.blanks, updated_at: merged.updated_at }).eq('id', id).select(FILL_BLANK_COLUMNS).maybeSingle();
+    throwIfError(error);
+    return (data as FillInBlank | null) ?? null;
+  }
+  const index = getState().fillInBlanks.findIndex((item) => item.id === id);
+  if (index === -1) return null;
+  getState().fillInBlanks[index] = merged;
+  return merged;
+}
+
+export async function deleteFillInBlank(id: number): Promise<boolean> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('fill_in_blanks').delete().eq('id', id).select('id');
+    throwIfError(error);
+    return (data ?? []).length > 0;
+  }
+  const index = getState().fillInBlanks.findIndex((item) => item.id === id);
+  if (index === -1) return false;
+  getState().fillInBlanks.splice(index, 1);
+  return true;
+}
+
+export async function createFillBlankResult(input: Omit<FillBlankResult, 'id' | 'completedAt'>): Promise<FillBlankResult> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('fill_blank_results').insert({ user_id: input.userId, fill_blank_id: input.fillBlankId, score: input.score, total_blanks: input.totalBlanks, correct_blanks: input.correctBlanks }).select('id, user_id, fill_blank_id, score, total_blanks, correct_blanks, completed_at').single();
+    throwIfError(error);
+    const row = data as Record<string, unknown>;
+    return { id: Number(row.id), userId: row.user_id ? String(row.user_id) : null, fillBlankId: Number(row.fill_blank_id), score: Number(row.score), totalBlanks: Number(row.total_blanks), correctBlanks: Number(row.correct_blanks), completedAt: String(row.completed_at) };
+  }
+  const item: FillBlankResult = { ...input, id: getState().nextFillBlankResultId++, completedAt: new Date().toISOString() };
+  getState().fillBlankResults.push(item);
+  return item;
 }
 
 // ===== SUBJECTS =====

@@ -99,6 +99,9 @@ const CategoryDetail: NextPage<CategoryDetailProps> = ({ slug }) => {
                   <Link href={`/exam/${subject.id}`} className="btn-start">
                     Bắt đầu ôn tập →
                   </Link>
+                  <Link href={`/fill-in?subjectId=${subject.id}`} className="btn-fill-in">
+                    Bài tập điền khuyết
+                  </Link>
                 </div>
               ))}
             </div>

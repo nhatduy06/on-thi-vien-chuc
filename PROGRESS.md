@@ -49,11 +49,11 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 - [x] Seed câu hỏi vào Supabase (`supabase/seed.sql`)
 
 ### Giai đoạn 4: Bài tập điền khuyết
-- [ ] Tạo trình soạn thảo văn bản cho tài liệu luật
-- [ ] Đánh dấu chỗ trống và nhận đầu vào từ người dùng
-- [ ] Xác thực câu trả lời so với văn bản đúng
-- [ ] Cung cấp phản hồi tức thì và chấm điểm
-- [ ] Lưu kết quả bài tập vào Supabase
+- [x] Tạo trình soạn thảo văn bản cho tài liệu luật
+- [x] Đánh dấu chỗ trống bằng cú pháp `{{1}}`, `{{2}}` và nhận đầu vào
+- [x] Xác thực câu trả lời so với văn bản đúng
+- [x] Cung cấp phản hồi tức thì và chấm điểm
+- [x] Lưu kết quả bài tập vào Supabase cho người dùng đã đăng nhập
 
 ### Giai đoạn 5: Tối ưu hóa, Kiểm thử & Triển khai
 - [X] Viết unit test và integration test
@@ -71,7 +71,7 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 
 #### Feature 6.2 - Quản lý câu hỏi
 - [x] CRUD Câu hỏi trắc nghiệm
-- [ ] CRUD Bài tập điền khuyết
+- [x] CRUD Bài tập điền khuyết
 - [ ] Upload hình ảnh (nếu có)
 
 #### Feature 6.3 - Nhập dữ liệu
@@ -124,6 +124,9 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
   - `CRUD /api/admin/articles` — Quản lý bài viết (cần đăng nhập admin)
   - `GET /api/me` — Hồ sơ, tiến độ và lịch sử của người dùng hiện tại
   - `GET /api/me/results/[id]` — Xem lại bài thi của chính người dùng
+  - `GET /api/fill-blanks` — Danh sách bài tập điền khuyết
+  - `POST /api/fill-blank-results` — Lưu kết quả bài tập cho người dùng đã đăng nhập
+  - `CRUD /api/admin/fill-blanks` — Quản lý bài tập điền khuyết
   - `CRUD /api/admin/*` — Quản lý categories, subjects, questions, results
 - **Các tệp đã tạo:**
   - `src/lib/db.ts` — Lớp truy cập Supabase, tự động fallback mock khi local chưa cấu hình
@@ -138,4 +141,4 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
   - `NEXT_PUBLIC_SUPABASE_URL` — URL Supabase cho client-side
   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Anon key cho client-side
   - `ADMIN_PASSWORD` — Mật khẩu admin CMS
-- **Bước tiếp theo:** Chạy các phần bổ sung trong `supabase/schema.sql` và `supabase/seed.sql`, deploy lại, đo PageSpeed và hoàn thiện Giai đoạn 4 (Bài tập điền khuyết).
+- **Bước tiếp theo:** Chạy các phần bổ sung trong `supabase/schema.sql` và `supabase/seed.sql`, deploy lại, đo PageSpeed và tiếp tục tối ưu production.
