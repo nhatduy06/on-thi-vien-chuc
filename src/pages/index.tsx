@@ -7,6 +7,7 @@ import { Category } from '../lib/mock';
 import { getCategories } from '../lib/db';
 import { listRecruitmentNotices } from '../lib/store';
 import type { RecruitmentNotice } from '../lib/store';
+import { cleanNoticeExcerpt } from '../lib/recruitment';
 import {
   ArrowRight,
   BookOpenCheck,
@@ -44,7 +45,7 @@ const Home: NextPage<HomeProps> = ({ initialCategories, initialRecruitmentNotice
   };
 
   return (
-    <Layout title="Trang chủ - Viên Chức 247">
+    <Layout title="Vienchuc247 - Trang chủ">
       <div className="home-page">
         <section className="home-hero" aria-labelledby="home-title">
           <Image
@@ -92,7 +93,7 @@ const Home: NextPage<HomeProps> = ({ initialCategories, initialRecruitmentNotice
           <div className="home-updates-panel" aria-labelledby="updates-title">
             <h2 id="updates-title">Tuyển dụng</h2>
             <div className="home-article-list">
-              {initialRecruitmentNotices.slice(0, 3).map((notice) => <a href={notice.official_url || notice.aggregator_url} target="_blank" rel="noreferrer" className="home-article" key={notice.id}><span><strong>{notice.title}</strong><small>{notice.excerpt}</small><time dateTime={notice.published_at || undefined}>{notice.published_at ? new Date(notice.published_at).toLocaleDateString('vi-VN') : ''}</time></span></a>)}
+              {initialRecruitmentNotices.slice(0, 3).map((notice) => <a href={notice.official_url || notice.aggregator_url} target="_blank" rel="noreferrer" className="home-article" key={notice.id}><span><strong>{notice.title}</strong><small>{cleanNoticeExcerpt(notice.excerpt)}</small><time dateTime={notice.published_at || undefined}>{notice.published_at ? new Date(notice.published_at).toLocaleDateString('vi-VN') : ''}</time></span></a>)}
             </div>
             <a href="/recruitment" className="home-articles-link">Xem tất cả tuyển dụng <ArrowRight size={15} aria-hidden="true" /></a>
           </div>

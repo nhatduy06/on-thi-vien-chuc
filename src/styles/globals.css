@@ -535,7 +535,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .home-feature-item h3 { margin-bottom: 3px; font-size: .9rem; }
 .home-feature-item p { color: #71809d; font-size: .78rem; line-height: 1.55; }
 .home-updates-panel { padding: 18px 22px 16px; border: 1px solid #cfdcf4; background: #fff; box-shadow: 0 8px 22px rgba(30,86,255,.06); }
-.home-updates-panel h2 { padding: 12px 15px; margin-bottom: 5px; border: 1px solid #c6d8f5; background: #eaf1ff; color: var(--primary-dark); font-size: 1.2rem; letter-spacing: -.02em; }
+.home-updates-panel h2 { padding: 12px 15px; margin-bottom: 5px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-size: 1.2rem; letter-spacing: -.02em; }
 .home-article-list { display: flex; flex-direction: column; }
 .home-article { display: flex; align-items: center; gap: 12px; padding: 13px 5px; border-bottom: 1px solid #e1e6ef; }
 .home-article:hover strong { color: var(--primary); }
