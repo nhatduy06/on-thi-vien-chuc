@@ -631,13 +631,18 @@ export async function getResultReview(userId: string, resultId: number): Promise
 
 // ===== STATS (dashboard) =====
 export async function getStats() {
-  const [categories, subjects, questions, results, resultAnswers] = await Promise.all([
+  const [categories, subjects, questions, results] = await Promise.all([
     listCategories(),
     listSubjects(),
     listQuestions(),
     listResults(),
-    listResultAnswers(),
   ]);
+  let resultAnswers: ExamResultAnswer[] = [];
+  try {
+    resultAnswers = await listResultAnswers();
+  } catch {
+    // Keep the dashboard usable until the answer-detail migration is applied.
+  }
   const totalResults = results.length;
   const avgScore = totalResults > 0
     ? Math.round((results.reduce((sum, result) => sum + result.score, 0) / totalResults) * 10) / 10
