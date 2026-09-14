@@ -110,6 +110,12 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 - [x] Phân trang 10 câu hỏi mỗi trang
 - [x] Sidebar điều hướng toàn bộ câu hỏi
 - [x] Hiển thị trạng thái đã/chưa trả lời
+
+#### Feature 6.9 - Thông báo tuyển dụng
+- [x] Đọc dữ liệu `recruitment_notices` từ Supabase
+- [x] Hiển thị tại trang `/recruitment`
+- [x] Ưu tiên `official_url`, fallback về `aggregator_url`
+- [x] Lọc theo từ khóa và tỉnh/thành
 ---
 
 ## Ghi chú
@@ -129,6 +135,7 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
   - `GET /api/fill-blanks` — Danh sách bài tập điền khuyết
   - `POST /api/fill-blank-results` — Lưu kết quả bài tập cho người dùng đã đăng nhập
   - `CRUD /api/admin/fill-blanks` — Quản lý bài tập điền khuyết
+  - `GET /api/recruitment-notices` — Danh sách thông báo tuyển dụng đã xuất bản
   - `CRUD /api/admin/*` — Quản lý categories, subjects, questions, results
 - **Các tệp đã tạo:**
   - `src/lib/db.ts` — Lớp truy cập Supabase, tự động fallback mock khi local chưa cấu hình

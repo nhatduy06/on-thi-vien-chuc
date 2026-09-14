@@ -1,0 +1,115 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Arial;}{\f1 Consolas;}}
+\viewkind4\uc1
+\pard\qc\f0\fs36\b H\u431?\u7898?NG D\u7850?N D\u7920? \u193?N VI\u202?N CH\u7912?C 247\b0\par
+\pard\qc\fs22 Website production: https://vienchuc247.vercel.app\par
+\pard\sa240\par
+\pard\fs28\b 1. T\u7892?NG QUAN D\u7920? \u193?N\b0\par
+\pard\fs22 D\u7921? \u225?n s\u7917? d\u7909?ng Next.js 16, React 19, TypeScript, Supabase PostgreSQL, Supabase Auth v\u224? Vercel Hobby. Source code \u273?\u432?\u7907?c l\u432?u tr\u234?n GitHub v\u224? Vercel t\u7921? \u273?\u7897?ng deploy khi push v\u224?o nh\u225?nh main.\par
+\pard\fs22 Admin CMS s\u7917? d\u7909?ng session HttpOnly k\u253? HMAC. Ng\u432?\u7901?i d\u249?ng h\u7885?c vi\u234?n \u273?\u259?ng nh\u7853?p Google b\u7857?ng Supabase Auth.\par
+
+\pard\fs28\b 2. C\u193?C CH\u7912?C N\u258?NG \u272?\u195? HO\u192?N TH\u192?NH\b0\par
+\pard\fs24\b Trang ng\u432?\u7901?i d\u249?ng\b0\par
+\pard\fs22 - Trang ch\u7911? responsive, Hero Banner, danh m\u7909?c \u244?n thi v\u224? ch\u7911? \u273?\u7873?.\par
+- Trang b\u224?i vi\u7871?t c\u7853?p nh\u7853?t t\u7841?i /articles v\u224? trang chi ti\u7871?t b\u224?i vi\u7871?t.\par
+- Menu mobile, responsive desktop/tablet/mobile, t\u7889?i \u432?u \u7843?nh Hero.\par
+
+\pard\fs24\b Thi tr\u7855?c nghi\u7879?m\b0\par
+\pard\fs22 - Hi\u7875?n th\u7883? 10 c\u226?u h\u7887?i m\u7895?i trang.\par
+- Sidebar hi\u7875?n th\u7883? to\u224?n b\u7897? c\u226?u h\u7887?i v\u224? tr\u7841?ng th\u225?i \u273?\u227?/ch\u432?a l\u224?m.\par
+- \u272?\u7891?ng h\u7891? \u273?\u7871?m ng\u432?\u7907?c, chuy\u7875?n trang, ch\u7885?n \u273?\u225?p \u225?n, ch\u7845?m \u273?i\u7875?m v\u224? xem l\u7901?i gi\u7843?i.\par
+- Ch\u7881? l\u432?u k\u7871?t qu\u7843? khi ng\u432?\u7901?i d\u249?ng \u273?\u227? \u273?\u259?ng nh\u7853?p.\par
+
+\pard\fs24\b H\u7891? s\u417? h\u7885?c vi\u234?n\b0\par
+\pard\fs22 - H\u7891? s\u417? t\u7841?i /profile.\par
+- Hi\u7875?n th\u7883? l\u432?\u7907?t thi, \u273?i\u7875?m trung b\u236?nh, \u273?i\u7875?m cao nh\u7845?t v\u224? t\u7927? l\u7879? \u273?\u250?ng.\par
+- Ti\u7871?n \u273?\u7897? theo ch\u7911? \u273?\u7873?, l\u7883?ch s\u7917? l\u224?m b\u224?i v\u224? xem l\u7841?i b\u224?i \u273?\u227? l\u224?m.\par
+
+\pard\fs24\b B\u224?i t\u7853?p \u273?i\u7873?n khuy\u7871?t\b0\par
+\pard\fs22 - Danh s\u225?ch t\u7841?i /fill-in.\par
+- Hi\u7875?n th\u7883? 10 b\u224?i m\u7895?i trang, sidebar \u273?i\u7873?u h\u432?\u7899?ng v\u224? tr\u7841?ng th\u225?i \u273?\u227? \u273?i\u7873?n.\par
+- D\u249?ng c\u250? ph\u225?p {{1}}, {{2}} \u273?\u7875? t\u7841?o \u244? tr\u7889?ng.\par
+- N\u250?t Ki\u7875?m tra, ph\u7843?n h\u7891?i \u273?\u250?ng/sai t\u7915?ng \u244?, hi\u7875?n th\u7883? \u273?\u225?p \u225?n \u273?\u250?ng.\par
+- Ng\u432?\u7901?i \u273?\u259?ng nh\u7853?p \u273?\u432?\u7907?c l\u432?u k\u7871?t qu\u7843? v\u224?o Supabase.\par
+
+\pard\fs24\b Admin CMS\b0\par
+\pard\fs22 - /admin: Dashboard th\u7889?ng k\u234?.\par
+- /admin/categories: CRUD danh m\u7909?c.\par
+- /admin/subjects: CRUD ch\u7911? \u273?\u7873?.\par
+- /admin/questions: CRUD c\u226?u h\u7887?i tr\u7855?c nghi\u7879?m.\par
+- /admin/articles: CRUD b\u224?i vi\u7871?t.\par
+- /admin/fill-blanks: CRUD b\u224?i t\u7853?p \u273?i\u7873?n khuy\u7871?t.\par
+- /admin/results: Xem k\u7871?t qu\u7843? thi.\par
+
+\pard\fs24\b Th\u7889?ng k\u234? Admin\b0\par
+\pard\fs22 - T\u7893?ng l\u432?\u7907?t thi v\u224? \u273?i\u7875?m trung b\u236?nh.\par
+- L\u432?\u7907?t thi 14 ng\u224?y g\u7847?n nh\u7845?t.\par
+- \u272?i\u7875?m trung b\u236?nh v\u224? t\u7927? l\u7879? \u273?\u250?ng theo ch\u7911? \u273?\u7873?.\par
+- Top c\u226?u h\u7887?i sai nhi\u7873?u nh\u7845?t.\par
+
+\pard\fs28\b 3. C\u193?C B\u7842?NG SUPABASE QUAN TR\u7884?NG\b0\par
+\pard\fs22 categories: danh m\u7909?c.\par
+subjects: ch\u7911? \u273?\u7873?.\par
+questions: c\u226?u h\u7887?i tr\u7855?c nghi\u7879?m.\par
+exam_results: k\u7871?t qu\u7843? t\u7893?ng qu\u225?t b\u224?i thi.\par
+exam_result_answers: \u273?\u225?p \u225?n t\u7915?ng c\u226?u \u273?\u7875? th\u7889?ng k\u234? c\u226?u sai.\par
+fill_in_blanks: b\u224?i t\u7853?p \u273?i\u7873?n khuy\u7871?t.\par
+fill_blank_results: k\u7871?t qu\u7843? b\u224?i \u273?i\u7873?n khuy\u7871?t.\par
+articles: b\u224?i vi\u7871?t c\u7853?p nh\u7853?t.\par
+
+\pard\fs28\b 4. TR\u7840?NG TH\u193?I BACKUP HI\u7878?N T\u7840?I\b0\par
+\pard\fs22 Hi\u7879?n t\u7841?i backup ch\u432?a \u273?\u432?\u7907?c b\u7853?t t\u7921? \u273?\u7897?ng v\u236? website ch\u432?a c\u243? ng\u432?\u7901?i d\u249?ng th\u7921?c t\u7871?. Script v\u224? workflow \u273?\u227? chu\u7849?n b\u7883? s\u7861?n nh\u432?ng workflow ch\u7881? cho ph\u233?p ch\u7841?y th\u7911? c\u244?ng.\par
+Script th\u7911? c\u244?ng: scripts/backup-supabase.ps1\par
+L\u7879?nh ch\u7841?y: npm run backup:db\par
+File backup \u273?\u432?\u7907?c l\u432?u trong th\u432? m\u7909?c backups/ v\u224? th\u432? m\u7909?c n\u224?y \u273?\u227? \u273?\u432?\u7907?c th\u234?m v\u224?o .gitignore.\par
+
+\pard\fs28\b 5. BACKUP TH\u7910? C\u212?NG SAU N\u192?Y\b0\par
+\pard\fs22 B\u432?\u7899?c 1: C\u224?i PostgreSQL client \u273?\u7875? c\u243? l\u7879?nh pg_dump.\par
+B\u432?\u7899?c 2: V\u224?o Supabase, ch\u7885?n Project Settings, Database, Connection string, URI.\par
+B\u432?\u7899?c 3: Trong PowerShell ch\u7841?y:\par
+\f1 $env:SUPABASE_DB_URL="postgresql://postgres:PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres"\par
+npm run backup:db\par
+\f0 B\u432?\u7899?c 4: File c\u243? d\u7841?ng backups\\supabase-YYYYMMDD-HHmmss.sql. T\u7843?i file l\u234?n Google Drive ho\u7863?c OneDrive.\par
+B\u432?\u7899?c 5: X\u243?a bi\u7871?n m\u244?i tr\u432?\u7901?ng:\par
+\f1 Remove-Item Env:SUPABASE_DB_URL\f0\par
+Kh\u244?ng \u273?\u432?a connection string, password ho\u7863?c file backup l\u234?n GitHub.\par
+
+\pard\fs28\b 6. BACKUP T\u7920? \u272?\u7896?NG GOOGLE DRIVE\b0\par
+\pard\fs22 B\u432?\u7899?c 1: C\u224?i rclone b\u7857?ng l\u7879?nh:\par
+\f1 winget install Rclone.Rclone\f0\par
+B\u432?\u7899?c 2: Ch\u7841?y rclone config, t\u7841?o remote t\u234?n gdrive, lo\u7841?i storage Google Drive v\u224? c\u7845?p quy\u7873?n tr\u234?n tr\u236?nh duy\u7879?t.\par
+B\u432?\u7899?c 3: M\u227? h\u243?a file c\u7845?u h\u236?nh rclone:\par
+\f1 $configPath = "$env:APPDATA\\rclone\\rclone.conf"\par
+[Convert]::ToBase64String([IO.File]::ReadAllBytes($configPath)) | Set-Clipboard\f0\par
+B\u432?\u7899?c 4: V\u224?o GitHub, Settings, Secrets and variables, Actions v\u224? t\u7841?o hai secret: SUPABASE_DB_URL v\u224? RCLONE_CONFIG_B64.\par
+B\u432?\u7899?c 5: B\u7853?t l\u7841?i l\u7883?ch schedule trong .github/workflows/supabase-backup.yml.\par
+B\u432?\u7899?c 6: V\u224?o GitHub Actions, ch\u7885?n Supabase Backup, b\u7845?m Run workflow \u273?\u7875? ki\u7875?m tra.\par
+Backup s\u7869? \u273?\u432?\u7907?c upload v\u224?o th\u432? m\u7909?c Google Drive VienChuc247-Backups.\par
+
+\pard\fs28\b 7. RESTORE D\u7918? LI\u7878?U\b0\par
+\pard\fs22 N\u234?n restore th\u7917? v\u224?o project Supabase ph\u7909? tr\u432?\u7899?c. Kh\u244?ng restore tr\u7921?c ti\u7871?p production n\u7871?u ch\u432?a ki\u7875?m tra.\par
+Restore file SQL:\par
+\f1 psql $env:SUPABASE_DB_URL -f "backups\\supabase-YYYYMMDD-HHmmss.sql"\f0\par
+Restore file n\u233?n t\u7915? Google Drive:\par
+\f1 gzip -dc supabase-backup.sql.gz | psql "$SUPABASE_DB_URL"\f0\par
+Backup public database kh\u244?ng t\u7921? \u273?\u7897?ng backup ng\u432?\u7901?i d\u249?ng Supabase Auth. Khi website c\u243? nhi\u7873?u ng\u432?\u7901?i d\u249?ng, c\u7847?n c\u243? quy tr\u236?nh export Auth ri\u234?ng.\par
+
+\pard\fs28\b 8. MONITORING V\u192? CI/CD MI\u7876?N PH\u205?\b0\par
+\pard\fs22 - D\u249?ng Vercel Dashboard \u273?\u7875? xem deployment v\u224? runtime logs.\par
+- D\u249?ng Supabase Dashboard \u273?\u7875? theo d\u245?i database v\u224? API.\par
+- D\u249?ng UptimeRobot mi\u7877?n ph\u237? \u273?\u7875? ki\u7875?m tra website.\par
+- D\u249?ng GitHub Actions ch\u7841?y npm ci, npm run typecheck, npm test v\u224? npm run build.\par
+
+\pard\fs28\b 9. TH\u7912? T\u7920? \u431?U TI\u202?N\b0\par
+\pard\fs22 1. Ch\u7841?y schema.sql v\u224? seed.sql tr\u234?n Supabase.\par
+2. Ki\u7875?m tra production sau m\u7895?i deployment.\par
+3. Khi c\u243? d\u7919? li\u7879?u th\u7853?t, ch\u7841?y backup th\u7911? c\u244?ng \u273?\u7847?u ti\u234?n.\par
+4. Th\u7917? restore backup tr\u234?n project ph\u7909?.\par
+5. B\u7853?t backup Google Drive h\u224?ng tu\u7847?n.\par
+6. Sau \u273?\u243? tri\u7875?n khai Audit Log, Import JSON v\u224? monitoring n\u226?ng cao.\par
+
+\pard\fs28\b 10. C\u7852?P NH\u7852?T CODE\b0\par
+\pard\fs22\f1 git add .\par
+\pard\sa240\par
+\pard\qc\fs20 T\u224?i li\u7879?u d\u7921? \u225?n Vi\u234?n Ch\u7913?c 247\par
+}

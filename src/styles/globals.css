@@ -662,6 +662,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .article-detail-excerpt { margin-bottom: 30px; font-size: 1rem; }
 .article-detail-content { color: #354361; font-size: .95rem; line-height: 1.85; }
 .article-detail-content p { margin-bottom: 18px; }
+.recruitment-page { max-width: 900px; margin: 0 auto; padding: 54px 0 80px; }
+.recruitment-heading { margin-bottom: 28px; }
+.recruitment-heading h1 { margin: 8px 0; color: #17233a; font-size: clamp(2rem, 4vw, 2.7rem); letter-spacing: -.045em; }
+.recruitment-heading p { color: #697690; font-size: .92rem; }
+.recruitment-filters { display: grid; grid-template-columns: 1fr 220px; gap: 10px; margin-bottom: 18px; }
+.recruitment-list { display: flex; flex-direction: column; gap: 12px; }
+.recruitment-card { padding: 22px 24px; border: 1px solid #dce5f5; border-radius: 14px; background: #fff; box-shadow: 0 4px 18px rgba(30,86,255,.05); }
+.recruitment-card h2 { margin: 8px 0; color: #1b2943; font-size: 1.08rem; line-height: 1.4; }
+.recruitment-card p { color: #697690; font-size: .84rem; line-height: 1.6; }
+.recruitment-card-meta { display: flex; gap: 10px; flex-wrap: wrap; color: #71809d; font-size: .72rem; }
+.recruitment-card-meta span { color: var(--primary); font-weight: 700; }
+.recruitment-card-meta time { margin-left: auto; }
+@media (max-width: 700px) { .recruitment-page { padding: 38px 0 60px; } .recruitment-filters { grid-template-columns: 1fr; } .recruitment-card { padding: 19px; } .recruitment-card-meta time { margin-left: 0; } }
 
 /* Multi-question exam */
 .exam-layout { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 24px; align-items: start; }

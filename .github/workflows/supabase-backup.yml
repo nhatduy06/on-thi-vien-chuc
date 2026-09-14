@@ -1,0 +1,57 @@
+name: Supabase Backup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+
+    steps:
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Create database backup
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "Missing SUPABASE_DB_URL repository secret"
+            exit 1
+          fi
+
+          mkdir -p backups
+          timestamp=$(date -u +%Y%m%d-%H%M%S)
+          pg_dump "$SUPABASE_DB_URL" \
+            --schema=public \
+            --format=plain \
+            --no-owner \
+            --no-privileges \
+            --file="backups/supabase-$timestamp.sql"
+          gzip "backups/supabase-$timestamp.sql"
+
+      - name: Store backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ github.run_id }}
+          path: backups/*.sql.gz
+          retention-days: 30
+
+      - name: Install rclone
+        run: curl https://rclone.org/install.sh | sudo bash
+
+      - name: Configure Google Drive remote
+        env:
+          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+        run: |
+          if [ -z "$RCLONE_CONFIG_B64" ]; then
+            echo "Missing RCLONE_CONFIG_B64 repository secret"
+            exit 1
+          fi
+          mkdir -p "$HOME/.config/rclone"
+          echo "$RCLONE_CONFIG_B64" | base64 --decode > "$HOME/.config/rclone/rclone.conf"
+
+      - name: Upload backup to Google Drive
+        run: |
+          rclone copy backups "gdrive:VienChuc247-Backups" --create-empty-src-dirs
+          rclone delete "gdrive:VienChuc247-Backups" --min-age 90d

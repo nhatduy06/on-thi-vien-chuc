@@ -43,6 +43,23 @@ const SUBJECT_COLUMNS = 'id, category_id, name, slug, description, display_order
 const QUESTION_COLUMNS = 'id, subject_id, content, option_a, option_b, option_c, option_d, correct_answer, explanation, difficulty';
 const ARTICLE_COLUMNS = 'id, title, excerpt, content, is_published, published_at, created_at, updated_at';
 const FILL_BLANK_COLUMNS = 'id, subject_id, title, content, blanks, created_at, updated_at';
+const RECRUITMENT_NOTICE_COLUMNS = 'id, title, excerpt, aggregator_url, official_url, source_name, province, recruitment_type, published_at, content_hash, is_published, created_at, updated_at';
+
+export interface RecruitmentNotice {
+  id: number;
+  title: string;
+  excerpt: string;
+  aggregator_url: string;
+  official_url: string | null;
+  source_name: string;
+  province: string | null;
+  recruitment_type: string | null;
+  published_at: string | null;
+  content_hash: string | null;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
 function getSupabase(): SupabaseClient | null {
   const url = process.env.SUPABASE_URL;
@@ -278,6 +295,17 @@ export async function deleteArticle(id: number): Promise<boolean> {
   if (index === -1) return false;
   mockArticles.splice(index, 1);
   return true;
+}
+
+// ===== RECRUITMENT NOTICES =====
+export async function listRecruitmentNotices(limit = 100): Promise<RecruitmentNotice[]> {
+  const db = getSupabase();
+  if (db && !shouldUseFallback()) {
+    const { data, error } = await db.from('recruitment_notices').select(RECRUITMENT_NOTICE_COLUMNS).eq('is_published', true).order('published_at', { ascending: false, nullsFirst: false }).limit(limit);
+    throwIfError(error);
+    return (data ?? []) as RecruitmentNotice[];
+  }
+  return [];
 }
 
 // ===== FILL-IN-BLANK EXERCISES =====
