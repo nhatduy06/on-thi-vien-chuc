@@ -3,9 +3,10 @@ import Image from 'next/image';
 import { useState, type ReactNode } from 'react';
 import Layout from '../components/Layout';
 import CategoryCard from '../components/CategoryCard';
-import { Article, Category } from '../lib/mock';
+import { Category } from '../lib/mock';
 import { getCategories } from '../lib/db';
-import { listArticles } from '../lib/store';
+import { listRecruitmentNotices } from '../lib/store';
+import type { RecruitmentNotice } from '../lib/store';
 import {
   ArrowRight,
   BookOpenCheck,
@@ -19,10 +20,10 @@ import {
 
 interface HomeProps {
   initialCategories: Category[];
-  initialArticles: Article[];
+  initialRecruitmentNotices: RecruitmentNotice[];
 }
 
-const Home: NextPage<HomeProps> = ({ initialCategories, initialArticles }) => {
+const Home: NextPage<HomeProps> = ({ initialCategories, initialRecruitmentNotices }) => {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,11 +90,11 @@ const Home: NextPage<HomeProps> = ({ initialCategories, initialArticles }) => {
 
         <section className="home-section home-features" id="features" aria-labelledby="features-title">
           <div className="home-updates-panel" aria-labelledby="updates-title">
-            <h2 id="updates-title">Cập nhật mới nhất</h2>
+            <h2 id="updates-title">Tuyển dụng</h2>
             <div className="home-article-list">
-              {initialArticles.slice(0, 3).map((article) => <a href={`/articles/${article.id}`} className="home-article" key={article.id}><span><strong>{article.title}</strong><small>{article.excerpt}</small><time dateTime={article.published_at}>{new Date(article.published_at).toLocaleDateString('vi-VN')}</time></span></a>)}
+              {initialRecruitmentNotices.slice(0, 3).map((notice) => <a href={notice.official_url || notice.aggregator_url} target="_blank" rel="noreferrer" className="home-article" key={notice.id}><span><strong>{notice.title}</strong><small>{notice.excerpt}</small><time dateTime={notice.published_at || undefined}>{notice.published_at ? new Date(notice.published_at).toLocaleDateString('vi-VN') : ''}</time></span></a>)}
             </div>
-            <a href="/articles" className="home-articles-link">Xem tất cả bài viết <ArrowRight size={15} aria-hidden="true" /></a>
+            <a href="/recruitment" className="home-articles-link">Xem tất cả tuyển dụng <ArrowRight size={15} aria-hidden="true" /></a>
           </div>
           <div className="home-feature-copy"><h2 id="features-title">Tự tin hơn sau mỗi lần làm bài</h2><div className="home-feature-list"><FeatureItem icon={<CheckCircle2 size={19} aria-hidden="true" />} title="Chấm điểm & phân tích tự động" /><FeatureItem icon={<Clock3 size={19} aria-hidden="true" />} title="Mô phỏng thời gian thực" /><FeatureItem icon={<MonitorSmartphone size={19} aria-hidden="true" />} title="Học trên mọi thiết bị" /></div></div>
         </section>
@@ -115,6 +116,6 @@ function FeatureItem({ icon, title }: { icon: ReactNode; title: string }) {
 export default Home;
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => ({
-  props: { initialCategories: await getCategories(), initialArticles: await listArticles() },
+  props: { initialCategories: await getCategories(), initialRecruitmentNotices: await listRecruitmentNotices(10) },
   revalidate: 60,
 });
