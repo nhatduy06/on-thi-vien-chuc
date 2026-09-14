@@ -535,7 +535,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .home-feature-item h3 { margin-bottom: 3px; font-size: .9rem; }
 .home-feature-item p { color: #71809d; font-size: .78rem; line-height: 1.55; }
 .home-updates-panel { padding: 18px 22px 16px; border: 1px solid #cfdcf4; background: #fff; box-shadow: 0 8px 22px rgba(30,86,255,.06); }
-.home-updates-panel h2 { padding: 12px 15px; margin-bottom: 5px; background: linear-gradient(135deg, #17618c, #2d789e); color: #fff; font-size: 1.2rem; letter-spacing: -.02em; }
+.home-updates-panel h2 { padding: 12px 15px; margin-bottom: 5px; border: 1px solid #c6d8f5; background: #eaf1ff; color: var(--primary-dark); font-size: 1.2rem; letter-spacing: -.02em; }
 .home-article-list { display: flex; flex-direction: column; }
 .home-article { display: flex; align-items: center; gap: 12px; padding: 13px 5px; border-bottom: 1px solid #e1e6ef; }
 .home-article:hover strong { color: var(--primary); }
@@ -546,6 +546,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .home-article > span:last-child { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
 .home-article strong { color: #1d2b45; font-size: .9rem; line-height: 1.4; }
 .home-article small, .home-article time { color: #6f7c94; font-size: .76rem; line-height: 1.45; }
+.home-article strong, .home-article small { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.home-article small { -webkit-line-clamp: 1; }
 .home-article time { color: #8792a6; }
 .home-articles-link { display: inline-flex; align-items: center; gap: 7px; padding: 13px 0 0; color: var(--primary); font-size: .8rem; font-weight: 750; }
 .home-articles-link:hover { color: var(--primary-dark); }
@@ -668,9 +670,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .recruitment-heading p { color: #697690; font-size: .92rem; }
 .recruitment-filters { display: grid; grid-template-columns: 1fr 220px; gap: 10px; margin-bottom: 18px; }
 .recruitment-list { display: flex; flex-direction: column; gap: 12px; }
-.recruitment-card { padding: 22px 24px; border: 1px solid #dce5f5; border-radius: 14px; background: #fff; box-shadow: 0 4px 18px rgba(30,86,255,.05); }
+.recruitment-card { padding: 22px 24px; border: 1px solid #b7d0f5; border-radius: 6px; background: #edf4ff; box-shadow: 0 4px 14px rgba(30,86,255,.05); }
 .recruitment-card h2 { margin: 8px 0; color: #1b2943; font-size: 1.08rem; line-height: 1.4; }
-.recruitment-card p { color: #697690; font-size: .84rem; line-height: 1.6; }
+.recruitment-card h2 a { color: inherit; }
+.recruitment-card h2 a:hover { color: var(--primary); }
+.recruitment-card p { display: -webkit-box; overflow: hidden; color: #697690; font-size: .84rem; line-height: 1.6; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
 .recruitment-card-meta { display: flex; gap: 10px; flex-wrap: wrap; color: #71809d; font-size: .72rem; }
 .recruitment-card-meta span { color: var(--primary); font-weight: 700; }
 .recruitment-card-meta time { margin-left: auto; }
