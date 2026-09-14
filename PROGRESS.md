@@ -54,6 +54,8 @@ Tệp này theo dõi tiến độ của dự án **Web ôn thi viên chức**. S
 - [x] Xác thực câu trả lời so với văn bản đúng
 - [x] Cung cấp phản hồi tức thì và chấm điểm
 - [x] Lưu kết quả bài tập vào Supabase cho người dùng đã đăng nhập
+- [x] Hiển thị nhiều bài tập mỗi trang và điều hướng danh sách
+- [x] Nút Kiểm tra ở cuối trang với trạng thái đúng/sai từng ô
 
 ### Giai đoạn 5: Tối ưu hóa, Kiểm thử & Triển khai
 - [X] Viết unit test và integration test
